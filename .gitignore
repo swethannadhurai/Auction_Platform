@@ -29,3 +29,12 @@ plugins/
 *.log
 *.bin
 *.dat
+
+
+node_modules/
+build/
+dist/
+.next/
+.DS_Store
+.env
+*.log
