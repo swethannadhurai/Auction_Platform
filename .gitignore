@@ -1,0 +1,13 @@
+# Ignore Eclipse/Java garbage
+*.dll
+*.exe
+*.class
+*.jar
+/p2/
+/pool/
+/plugins/
+/org.eclipse.justj.openjdk.hotspot.*
+
+# Optional: Ignore common OS files
+.DS_Store
+Thumbs.db
