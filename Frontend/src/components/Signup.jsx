@@ -26,7 +26,7 @@ function Signup() {
 		setLoading(true);
 		try {
 			const res = await axios.post(
-				"/api/users/register",
+				`${import.meta.env.TARGET}/api/users/register`,
 				{ username, email, password, confirmPassword },
 				{ withCredentials: true }
 			);
