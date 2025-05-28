@@ -11,3 +11,21 @@
 # Optional: Ignore common OS files
 .DS_Store
 Thumbs.db
+
+
+/p2/
+/plugins/
+/org.eclipse.justj.openjdk.hotspot.*
+
+
+# Ignore Eclipse and Java runtime garbage
+*.dll
+*.exe
+*.class
+*.jar
+p2/
+pool/
+plugins/
+*.log
+*.bin
+*.dat
