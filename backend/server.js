@@ -16,7 +16,7 @@ app.use('/uploads', express.static('uploads'));
 // CORS setup
 app.use(
 	cors({
-		origin: process.env.ORIGIN,
+		origin: "https://quiet-mandazi-6c1883.netlify.app",
 		methods: ["GET", "PUT", "POST", "DELETE"],
 		credentials: true,
 	})

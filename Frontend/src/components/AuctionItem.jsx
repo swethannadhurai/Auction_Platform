@@ -27,7 +27,7 @@ function AuctionItem() {
 	useEffect(() => {
 		const fetchAuctionItem = async () => {
 			try {
-				const res = await axios.get(`/api/auctions/${id}`);
+				const res = await axios.get("https://auction-platform-ett9.onrender.com/api/auctions/${id}");
 				setAuctionItem(res.data);
 			} catch (error) {
 				console.error("Error fetching auction item:", error);
@@ -42,7 +42,7 @@ function AuctionItem() {
 			if (token) {
 				try {
 					const res = await axios.post(
-						"/api/users/profile",
+						"https://auction-platform-ett9.onrender.com/api/users/profile",
 						{},
 						{
 							headers: { Authorization: `Bearer ${token}` },
@@ -57,7 +57,7 @@ function AuctionItem() {
 
 		const fetchWinner = async () => {
 			try {
-				const res = await axios.get(`/api/auctions/winner/${id}`);
+				const res = await axios.get("https://auction-platform-ett9.onrender.com/api/auctions/winner/${id}");
 				setWinner(res.data.winner);
 			} catch (error) {
 				if (error.response.data.winner !== "") {
@@ -75,7 +75,7 @@ function AuctionItem() {
 		const fetchBids = async () => {
 			setLoadingBids(true);
 			try {
-				const res = await axios.get(`/api/bids/${id}`);
+				const res = await axios.get("https://auction-platform-ett9.onrender.com/api/bids/${id}");
 				const sortedBids = res.data.sort(
 					(a, b) => b.bidAmount - a.bidAmount
 				);
@@ -124,7 +124,7 @@ function AuctionItem() {
 
 	const handleDelete = async () => {
 		try {
-			await axios.delete(`/api/auctions/${id}`);
+			await axios.delete("https://auction-platform-ett9.onrender.com/api/auctions/${id}");
 			navigate("/auctions");
 		} catch (error) {
 			console.error("Error deleting auction item:", error);
@@ -268,7 +268,7 @@ function AuctionItem() {
 			{auctionItem.createdBy === user.id && (
 				<div className="flex justify-center mt-6 space-x-4">
 					<Link
-						to={`/auction/edit/${id}`}
+						to={"https://auction-platform-ett9.onrender.com/auction/edit/${id}"}
 						className="px-6 py-3 text-white bg-blue-700 rounded-lg hover:bg-blue-800"
 					>
 						Edit
@@ -283,7 +283,7 @@ function AuctionItem() {
 			)}
 			{auctionItem.createdBy !== user.id && !isAuctionEnded && (
 				<Link
-					to={`/auction/bid/${id}`}>
+					to={"https://auction-platform-ett9.onrender.com/auction/bid/${id}"}>
 					  <button className="items-center justify-center block px-6 py-3 mt-6 text-center text-white bg-blue-700 rounded-lg ite hover:bg-blue-800">
 					Place a Bid </button>
 				</Link>
