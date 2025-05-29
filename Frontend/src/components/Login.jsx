@@ -30,7 +30,7 @@ function Login() {
 			);
 			if (res.status === 200) {
 				login();
-				navigate("/profile");
+			
 			}
 		} catch (err) {
 			setError(err.response?.data?.message || "An error occurred");
