@@ -9,7 +9,7 @@ export default defineConfig({
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-const target = "http://localhost:5000/api";
+const target = "https://auction-platform-ett9.onrender.com/api";
 
 export default defineConfig({
 	plugins: [react()],
