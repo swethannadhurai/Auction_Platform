@@ -25,7 +25,7 @@ function Profile() {
 			if (token) {
 				try {
 					const res = await axios.post(
-						`${import.meta.env.TARGET}/api/users/profile`,
+						`${import.meta.env.VITE_API_URL}/api/users/profile`,
 						{},
 						{
 							headers: { Authorization: `Bearer ${token}` },
@@ -46,7 +46,7 @@ function Profile() {
 			if (token) {
 				try {
 					const res = await axios.post(
-						`${import.meta.env.TARGET}/api/auctions/user`,
+						`${import.meta.env.VITE_API_URL}/api/auctions/user`,
 						{},
 						{
 							headers: { Authorization: `Bearer ${token}` },
@@ -70,7 +70,7 @@ function Profile() {
 			if (token) {
 				try {
 					const res = await axios.post(
-						`${import.meta.env.TARGET}/api/bids/user`,
+						`${import.meta.env.VITE_API_URL}/api/bids/user`,
 						{},
 						{
 							headers: { Authorization: `Bearer ${token}` },
@@ -94,7 +94,7 @@ function Profile() {
 			if (token) {
 				try {
 					const res = await axios.post(
-						`${import.meta.env.TARGET}/api/auctions/won`,
+						`${import.meta.env.VITE_API_URL}/api/auctions/won`,
 						{},
 						{
 							headers: { Authorization: `Bearer ${token}` },
