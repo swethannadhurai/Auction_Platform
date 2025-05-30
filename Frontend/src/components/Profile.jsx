@@ -19,7 +19,7 @@ function Profile() {
 	useEffect(() => {
 		const fetchUser = async () => {
 			try {
-				const res = await axios.post(
+				const res = await axios.get(
 					`${import.meta.env.VITE_API_URL}/api/users/profile`,
 					{},
 					{ withCredentials: true }
