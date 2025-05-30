@@ -49,29 +49,45 @@ function App() {
 						<Route path="/login" element={<Login />} />
 						<Route
 							path="/profile"
-							element={<ProtectedRoute component={Profile} />}
+							element={
+								<ProtectedRoute>
+									<Profile />
+								</ProtectedRoute>
+							}
 						/>
 						<Route path="/logout" element={<Logout />} />
 						<Route path="/auctions" element={<AuctionList />} />
 						<Route
 							path="/auction/:id"
-							element={<ProtectedRoute component={AuctionItem} />}
+							element={
+								<ProtectedRoute>
+									<AuctionItem />
+								</ProtectedRoute>
+							}
 						/>
 						<Route
 							path="/auction/create"
 							element={
-								<ProtectedRoute component={CreateAuctionItem} />
+								<ProtectedRoute>
+									<CreateAuctionItem />
+								</ProtectedRoute>
 							}
 						/>
 						<Route
 							path="/auction/edit/:id"
 							element={
-								<ProtectedRoute component={EditAuctionItem} />
+								<ProtectedRoute>
+									<EditAuctionItem />
+								</ProtectedRoute>
 							}
 						/>
 						<Route
 							path="/auction/bid/:id"
-							element={<ProtectedRoute component={BidForm} />}
+							element={
+								<ProtectedRoute>
+									<BidForm />
+								</ProtectedRoute>
+							}
 						/>
 					</Routes>
 				</div>

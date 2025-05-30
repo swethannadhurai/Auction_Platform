@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from "react-router-dom";
+/*import { Navigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
@@ -19,4 +19,22 @@ ProtectedRoute.propTypes = {
 	component: PropTypes.elementType.isRequired,
 };
 
+export default ProtectedRoute;*/
+
+import { useLocation, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../contexts";
+
+const ProtectedRoute = ({ children }) => {
+	const location = useLocation();
+	const { isLoggedIn } = useContext(AuthContext);
+
+	return isLoggedIn ? (
+		children
+	) : (
+		<Navigate to="/login" state={{ from: location }} replace />
+	);
+};
+
 export default ProtectedRoute;
+
