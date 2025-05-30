@@ -14,7 +14,7 @@ export const AuthProvider = AuthContext.Provider;*/
 
 import { createContext, useContext, useState, useEffect } from "react";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
