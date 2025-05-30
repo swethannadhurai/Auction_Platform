@@ -7,7 +7,7 @@ const CreateAuctionItem = () => {
 	const [description, setDescription] = useState("");
 	const [startingBid, setStartingBid] = useState("");
 	const [endDate, setEndDate] = useState("");
-	const [image, setImage] = useState(null); // New state for image file
+	const [image, setImage] = useState(null); 
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 

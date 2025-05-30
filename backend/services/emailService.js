@@ -3,7 +3,7 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  service: "Gmail", // or your email service
+  service: "Gmail", 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -29,7 +29,7 @@ const sendOutbidEmail = async (to, auctionTitle) => {
   await sendEmail(to, subject, html);
 };
 
-// NEW: Send winner email
+
 const sendAuctionResultEmail = async (to, auctionTitle, isWinner) => {
   const subject = isWinner
     ? "Congratulations! You won the auction"
@@ -42,7 +42,7 @@ const sendAuctionResultEmail = async (to, auctionTitle, isWinner) => {
   await sendEmail(to, subject, html);
 };
 
-// NEW: Send bid confirmation email
+
 const sendBidConfirmationEmail = async (to, auctionTitle, bidAmount) => {
   const subject = "Bid Confirmation";
   const html = `<p>Your bid of <b>$${bidAmount}</b> for auction <b>${auctionTitle}</b> has been placed successfully.</p>`;

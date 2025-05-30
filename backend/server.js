@@ -10,24 +10,24 @@ connectDB();
 const app = express();
 app.use(express.json());
 
-// Static folder for uploaded files
+
 app.use('/uploads', express.static('uploads'));
 
-// CORS setup
+
 app.use(
 	cors({
-		origin: "https://quiet-mandazi-6c1883.netlify.app",
+		origin: "https://zingy-dolphin-f24425.netlify.app/",
 		methods: ["GET", "PUT", "POST", "DELETE"],
 		credentials: true,
 	})
 );
 
-// API routes
+
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/auctions", require("./routes/auctionRoutes"));
 app.use("/api/bids", require("./routes/bidRoutes"));
 
-// ✅ Root route to prevent "Cannot GET /"
+
 app.get('/', (req, res) => {
 	res.send('API is running...');
 });

@@ -17,7 +17,7 @@ const placeBid = async (req, res) => {
 			return res.status(404).json({ message: "Auction item not found" });
 		}
 
-		// Get the current highest bid for this item
+		
 		const highestBid = await Bid.find({ auctionItemId })
 			.sort({ bidAmount: -1 })
 			.limit(1);
