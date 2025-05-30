@@ -16,7 +16,7 @@ app.use('/uploads', express.static('uploads'));
 
 app.use(
 	cors({
-		origin: "https://zingy-dolphin-f24425.netlify.app/",
+		origin: "https://zingy-dolphin-f24425.netlify.app",
 		methods: ["GET", "PUT", "POST", "DELETE"],
 		credentials: true,
 	})
