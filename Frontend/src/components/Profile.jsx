@@ -18,95 +18,57 @@ function Profile() {
 
 	useEffect(() => {
 		const fetchUser = async () => {
-			const token = document.cookie
-				.split("; ")
-				.find((row) => row.startsWith("jwt="))
-				?.split("=")[1];
-			if (token) {
-				try {
-					const res = await axios.post(
-						`${import.meta.env.VITE_API_URL}/api/users/profile`,
-						{},
-						{
-							headers: { Authorization: `Bearer ${token}` },
-						}
-					);
-					setUser(res.data);
-				} catch (error) {
-					console.error(error);
-				}
+			try {
+				const res = await axios.post(
+					`${import.meta.env.VITE_API_URL}/api/users/profile`,
+					{},
+					{ withCredentials: true }
+				);
+				setUser(res.data);
+			} catch (error) {
+				console.error("Error fetching user:", error);
 			}
 		};
 
 		const fetchAuctions = async () => {
-			const token = document.cookie
-				.split("; ")
-				.find((row) => row.startsWith("jwt="))
-				?.split("=")[1];
-			if (token) {
-				try {
-					const res = await axios.post(
-						`${import.meta.env.VITE_API_URL}/api/auctions/user`,
-						{},
-						{
-							headers: { Authorization: `Bearer ${token}` },
-						}
-					);
-					setAuctions(res.data.auctionItems);
-					setTotalPagesAuctions(
-						Math.ceil(res.data.auctionItems.length / ITEMS_PER_PAGE)
-					);
-				} catch (error) {
-					console.error(error);
-				}
+			try {
+				const res = await axios.post(
+					`${import.meta.env.VITE_API_URL}/api/auctions/user`,
+					{},
+					{ withCredentials: true }
+				);
+				setAuctions(res.data.auctionItems);
+				setTotalPagesAuctions(Math.ceil(res.data.auctionItems.length / ITEMS_PER_PAGE));
+			} catch (error) {
+				console.error("Error fetching auctions:", error);
 			}
 		};
 
 		const fetchBids = async () => {
-			const token = document.cookie
-				.split("; ")
-				.find((row) => row.startsWith("jwt="))
-				?.split("=")[1];
-			if (token) {
-				try {
-					const res = await axios.post(
-						`${import.meta.env.VITE_API_URL}/api/bids/user`,
-						{},
-						{
-							headers: { Authorization: `Bearer ${token}` },
-						}
-					);
-					setBids(res.data.bids);
-					setTotalPagesBids(
-						Math.ceil(res.data.bids.length / ITEMS_PER_PAGE)
-					);
-				} catch (error) {
-					console.error(error);
-				}
+			try {
+				const res = await axios.post(
+					`${import.meta.env.VITE_API_URL}/api/bids/user`,
+					{},
+					{ withCredentials: true }
+				);
+				setBids(res.data.bids);
+				setTotalPagesBids(Math.ceil(res.data.bids.length / ITEMS_PER_PAGE));
+			} catch (error) {
+				console.error("Error fetching bids:", error);
 			}
 		};
 
 		const fetchWonAuctions = async () => {
-			const token = document.cookie
-				.split("; ")
-				.find((row) => row.startsWith("jwt="))
-				?.split("=")[1];
-			if (token) {
-				try {
-					const res = await axios.post(
-						`${import.meta.env.VITE_API_URL}/api/auctions/won`,
-						{},
-						{
-							headers: { Authorization: `Bearer ${token}` },
-						}
-					);
-					setWonAuctions(res.data.wonAuctions);
-					setTotalPagesWon(
-						Math.ceil(res.data.wonAuctions.length / ITEMS_PER_PAGE)
-					);
-				} catch (error) {
-					console.error(error);
-				}
+			try {
+				const res = await axios.post(
+					`${import.meta.env.VITE_API_URL}/api/auctions/won`,
+					{},
+					{ withCredentials: true }
+				);
+				setWonAuctions(res.data.wonAuctions);
+				setTotalPagesWon(Math.ceil(res.data.wonAuctions.length / ITEMS_PER_PAGE));
+			} catch (error) {
+				console.error("Error fetching won auctions:", error);
 			}
 		};
 
