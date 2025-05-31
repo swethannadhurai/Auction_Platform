@@ -9,7 +9,7 @@ export default defineConfig({
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-const target = "https://auction-platform-ett9.onrender.com/api";
+const target = "http://localhost:5000";
 
 export default defineConfig({
 	plugins: [react()],
@@ -18,8 +18,8 @@ export default defineConfig({
 			"/api": {
 				target,
 				changeOrigin: true,
-				secure: true,
-				rewrite: (path) => path.replace(/^\/api/, ""),
+				secure: false, 
+				rewrite: (path) => path,
 			},
 		},
 	},

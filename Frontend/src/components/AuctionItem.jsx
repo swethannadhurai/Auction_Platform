@@ -27,7 +27,7 @@ function AuctionItem() {
 	useEffect(() => {
 		const fetchAuctionItem = async () => {
 			try {
-				const res = await axios.get("https://auction-platform-ett9.onrender.com/api/auctions/${id}");
+				const res = await axios.get(`https://auction-platform-ett9.onrender.com/api/auctions/${id}`);
 				setAuctionItem(res.data);
 			} catch (error) {
 				console.error("Error fetching auction item:", error);
@@ -37,7 +37,7 @@ function AuctionItem() {
 		const fetchUser = async () => {
 	try {
 		const res = await axios.post(
-			"https://auction-platform-ett9.onrender.com/api/users/profile",
+			`https://auction-platform-ett9.onrender.com/api/users/profile`,
 			{},
 			{
 				withCredentials: true, 
@@ -52,7 +52,7 @@ function AuctionItem() {
 
 		const fetchWinner = async () => {
 			try {
-				const res = await axios.get("https://auction-platform-ett9.onrender.com/api/auctions/winner/${id}");
+				const res = await axios.get(`https://auction-platform-ett9.onrender.com/api/auctions/winner/${id}`);
 				setWinner(res.data.winner);
 			} catch (error) {
 				if (error.response.data.winner !== "") {
@@ -70,7 +70,7 @@ function AuctionItem() {
 		const fetchBids = async () => {
 			setLoadingBids(true);
 			try {
-				const res = await axios.get("https://auction-platform-ett9.onrender.com/api/bids/${id}");
+				const res = await axios.get(`https://auction-platform-ett9.onrender.com/api/bids/${id}`);
 				const sortedBids = res.data.sort(
 					(a, b) => b.bidAmount - a.bidAmount
 				);
@@ -119,7 +119,7 @@ function AuctionItem() {
 
 	const handleDelete = async () => {
 		try {
-			await axios.delete("https://auction-platform-ett9.onrender.com/api/auctions/${id}");
+			await axios.delete(`https://auction-platform-ett9.onrender.com/api/auctions/${id}`);
 			navigate("/auctions");
 		} catch (error) {
 			console.error("Error deleting auction item:", error);
