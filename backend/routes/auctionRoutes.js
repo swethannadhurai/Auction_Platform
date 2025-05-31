@@ -21,13 +21,13 @@ router
 	.post(authMiddleware, upload.single("image"), createAuctionItem);
 
 
-router.get("/user", authMiddleware, getAuctionItemsByUser);
+router.post("/user", authMiddleware, getAuctionItemsByUser);
 
 router.get("/winner/:auctionId", authMiddleware, getAuctionWinner);
 
 
 
-router.get("/won", authMiddleware, getAuctionsWonByUser);
+router.post("/won", authMiddleware, getAuctionsWonByUser);
 
 
 router
