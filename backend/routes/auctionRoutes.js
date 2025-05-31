@@ -21,7 +21,7 @@ router
 	.post(authMiddleware, upload.single("image"), createAuctionItem);
 
 
-router.post("/user", authMiddleware, getAuctionItemsByUser);
+router.get("/user", authMiddleware, getAuctionItemsByUser);
 
 router.get("/winner/:auctionId", authMiddleware, getAuctionWinner);
 

@@ -12,36 +12,36 @@ const CreateAuctionItem = () => {
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
-		e.preventDefault();
-		const token = document.cookie
-			.split("; ")
-			.find((row) => row.startsWith("jwt="))
-			?.split("=")[1];
+	e.preventDefault();
 
-		if (token) {
-			try {
-				const formData = new FormData();
-				formData.append("title", title);
-				formData.append("description", description);
-				formData.append("startingBid", startingBid);
-				formData.append("endDate", endDate);
-				if (image) {
-					formData.append("image", image);
-				}
-
-				await axios.post(`${import.meta.env.VITE_API_URL}/api/auctions`, formData, {
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "multipart/form-data",
-					},
-				});
-				navigate("/profile");
-			} catch (err) {
-				setError("Failed to create auction. Please try again.");
-				console.error(err);
-			}
+	try {
+		const formData = new FormData();
+		formData.append("title", title);
+		formData.append("description", description);
+		formData.append("startingBid", startingBid);
+		formData.append("endDate", endDate);
+		if (image) {
+			formData.append("image", image);
 		}
-	};
+
+		await axios.post(
+			`${import.meta.env.VITE_API_URL}/api/auctions`,
+			formData,
+			{
+				withCredentials: true, 
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			}
+		);
+
+		navigate("/profile");
+	} catch (err) {
+		setError("Failed to create auction. Please try again.");
+		console.error(err);
+	}
+};
+
 
 	return (
 		<div className="bg-gray-900 min-h-screen py-12 px-4 sm:px-6 lg:px-8 text-gray-300">

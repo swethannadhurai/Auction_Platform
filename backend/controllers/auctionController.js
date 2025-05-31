@@ -50,22 +50,14 @@ const getAuctionItemById = async (req, res) => {
 
 const getAuctionItemsByUser = async (req, res) => {
 	try {
-		const token = req.headers.authorization.split(" ")[1];
-		const { id } = jwt.decode(token, process.env.JWT_SECRET, (err) => {
-			if (err) {
-				console.log(err);
-				return res.status(500).json({ message: err.message });
-			}
-		});
-		const auctionItems = await AuctionItem.find({ createdBy: id });
-		res.status(200).json({
-			auctionItems,
-		});
+		const auctionItems = await AuctionItem.find({ createdBy: req.user._id });
+		res.status(200).json({ auctionItems });
 	} catch (error) {
-		console.log(error.message);
+		console.error(error.message);
 		res.status(500).json({ message: error.message });
 	}
 };
+
 
 const updateAuctionItem = async (req, res) => {
 	const { id } = req.params;
@@ -170,30 +162,30 @@ const getAuctionWinner = async (req, res) => {
 
 const getAuctionsWonByUser = async (req, res) => {
 	try {
-		const token = req.headers.authorization.split(" ")[1];
-		const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-		const { id } = decodedToken;
+		const userId = req.user._id;
 
-		const bidsByUser = await Bid.find({ userId: id });
-		const auctionIds = bidsByUser.map((bid) => bid.auctionItemId);
-
+		const bidsByUser = await Bid.find({ userId });
+		const auctionIds = bidsByUser.map((bid) => bid.auctionItemId.toString());
 		const uniqueAuctionIds = [...new Set(auctionIds)];
 
 		let wonAuctions = [];
 
-		for (let i = 0; i < uniqueAuctionIds.length; i++) {
-			const auctionItemId = uniqueAuctionIds[i];
+		for (const auctionItemId of uniqueAuctionIds) {
 			const bids = await Bid.find({ auctionItemId });
-			let winningBid = bids.reduce(
+
+			if (!bids.length) continue;
+
+			const winningBid = bids.reduce(
 				(max, bid) => (bid.bidAmount > max.bidAmount ? bid : max),
 				bids[0]
 			);
 
 			const auctionItem = await AuctionItem.findById(auctionItemId);
-			const isAuctionEnded =
-				new Date(auctionItem.endDate) <= new Date(Date.now());
+			if (!auctionItem) continue;
 
-			if (isAuctionEnded && winningBid.userId.toString() === id) {
+			const isAuctionEnded = new Date(auctionItem.endDate) <= new Date();
+
+			if (isAuctionEnded && winningBid.userId.toString() === userId.toString()) {
 				wonAuctions.push({
 					auctionId: auctionItemId,
 					title: auctionItem.title,
@@ -203,12 +195,14 @@ const getAuctionsWonByUser = async (req, res) => {
 				});
 			}
 		}
+
 		res.status(200).json({ wonAuctions });
 	} catch (error) {
-		console.log(error.message);
+		console.error(error);
 		res.status(500).json({ message: error.message });
 	}
 };
+
 
 module.exports = {
 	createAuctionItem,

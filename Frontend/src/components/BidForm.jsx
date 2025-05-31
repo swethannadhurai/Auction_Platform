@@ -18,23 +18,22 @@ const BidForm = () => {
 		fetchAuctionItem();
 	}, [id]);
 
-	const handleBid = async (e) => {
-		e.preventDefault();
-		try {
-			const token = document.cookie
-				.split("; ")
-				.find((row) => row.startsWith("jwt="))
-				?.split("=")[1];
-			await axios.post(
-				"https://auction-platform-ett9.onrender.com/api/bids",
-				{ auctionItemId: id, bidAmount },
-				{ headers: { Authorization: `Bearer ${token}` } }
-			);
-			navigate(`/auction/${id}`);
-		} catch (err) {
-			console.error(err);
-		}
-	};
+    const handleBid = async (e) => {
+	e.preventDefault();
+	try {
+		await axios.post(
+			"https://auction-platform-ett9.onrender.com/api/bids",
+			{ auctionItemId: id, bidAmount },
+			{
+				withCredentials: true, 
+			}
+		);
+		navigate(`/auction/${id}`);
+	} catch (err) {
+		console.error(err);
+	}
+};
+
 
 	if (!auctionItem) return <div>Loading...</div>;
 

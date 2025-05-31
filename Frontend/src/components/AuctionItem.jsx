@@ -33,27 +33,22 @@ function AuctionItem() {
 				console.error("Error fetching auction item:", error);
 			}
 		};
-
+     
 		const fetchUser = async () => {
-			const token = document.cookie
-				.split("; ")
-				.find((row) => row.startsWith("jwt="))
-				?.split("=")[1];
-			if (token) {
-				try {
-					const res = await axios.post(
-						"https://auction-platform-ett9.onrender.com/api/users/profile",
-						{},
-						{
-							headers: { Authorization: `Bearer ${token}` },
-						}
-					);
-					setUser(res.data);
-				} catch (error) {
-					console.error("Error fetching user profile:", error);
-				}
+	try {
+		const res = await axios.post(
+			"https://auction-platform-ett9.onrender.com/api/users/profile",
+			{},
+			{
+				withCredentials: true, 
 			}
-		};
+		);
+		setUser(res.data);
+	} catch (error) {
+		console.error("Error fetching user profile:", error);
+	}
+};
+
 
 		const fetchWinner = async () => {
 			try {
