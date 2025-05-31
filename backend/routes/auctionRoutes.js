@@ -27,7 +27,7 @@ router.get("/winner/:auctionId", authMiddleware, getAuctionWinner);
 
 
 
-router.post("/won", authMiddleware, getAuctionsWonByUser);
+router.get("/won", authMiddleware, getAuctionsWonByUser);
 
 
 router

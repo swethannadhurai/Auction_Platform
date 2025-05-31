@@ -16,67 +16,67 @@ function Profile() {
 	const [totalPagesBids, setTotalPagesBids] = useState(1);
 	const [totalPagesWon, setTotalPagesWon] = useState(1);
 
-	useEffect(() => {
-		const fetchUser = async () => {
-			try {
-				const res = await axios.get(
-					`${import.meta.env.VITE_API_URL}/api/users/profile`,
-					{},
-					{ withCredentials: true }
-				);
-				setUser(res.data);
-			} catch (error) {
-				console.error("Error fetching user:", error);
-			}
-		};
+    useEffect(() => {
+	  const fetchUser = async () => {
+		try {
+			const res = await axios.get(
+				`${import.meta.env.VITE_API_URL}/api/users/profile`,
+				{ withCredentials: true }
+			);
+			setUser(res.data);
+		} catch (error) {
+			console.error("Error fetching user:", error.response?.data || error.message);
+		}
+	};
 
-		const fetchAuctions = async () => {
-			try {
-				const res = await axios.post(
-					`${import.meta.env.VITE_API_URL}/api/auctions/user`,
-					{},
-					{ withCredentials: true }
-				);
-				setAuctions(res.data.auctionItems);
-				setTotalPagesAuctions(Math.ceil(res.data.auctionItems.length / ITEMS_PER_PAGE));
-			} catch (error) {
-				console.error("Error fetching auctions:", error);
-			}
-		};
+	const fetchAuctions = async () => {
+		try {
+			const res = await axios.post(
+				`${import.meta.env.VITE_API_URL}/api/auctions/user`,
+				{},
+				{ withCredentials: true }
+			);
+			setAuctions(res.data.auctionItems);
+			setTotalPagesAuctions(Math.ceil(res.data.auctionItems.length / ITEMS_PER_PAGE));
+		} catch (error) {
+			console.error("Error fetching auctions:", error.response?.data || error.message);
+		}
+	};
 
-		const fetchBids = async () => {
-			try {
-				const res = await axios.post(
-					`${import.meta.env.VITE_API_URL}/api/bids/user`,
-					{},
-					{ withCredentials: true }
-				);
-				setBids(res.data.bids);
-				setTotalPagesBids(Math.ceil(res.data.bids.length / ITEMS_PER_PAGE));
-			} catch (error) {
-				console.error("Error fetching bids:", error);
-			}
-		};
+	const fetchBids = async () => {
+		try {
+			const res = await axios.post(
+				`${import.meta.env.VITE_API_URL}/api/bids/user`,
+				{},
+				{ withCredentials: true }
+			);
+			setBids(res.data.bids);
+			setTotalPagesBids(Math.ceil(res.data.bids.length / ITEMS_PER_PAGE));
+		} catch (error) {
+			console.error("Error fetching bids:", error.response?.data || error.message);
+		}
+	};
 
-		const fetchWonAuctions = async () => {
-			try {
-				const res = await axios.post(
-					`${import.meta.env.VITE_API_URL}/api/auctions/won`,
-					{},
-					{ withCredentials: true }
-				);
-				setWonAuctions(res.data.wonAuctions);
-				setTotalPagesWon(Math.ceil(res.data.wonAuctions.length / ITEMS_PER_PAGE));
-			} catch (error) {
-				console.error("Error fetching won auctions:", error);
-			}
-		};
+	const fetchWonAuctions = async () => {
+		try {
+			const res = await axios.post(
+				`${import.meta.env.VITE_API_URL}/api/auctions/won`,
+				{},
+				{ withCredentials: true }
+			);
+			setWonAuctions(res.data.wonAuctions);
+			setTotalPagesWon(Math.ceil(res.data.wonAuctions.length / ITEMS_PER_PAGE));
+		} catch (error) {
+			console.error("Error fetching won auctions:", error.response?.data || error.message);
+		}
+	};
 
-		fetchUser();
-		fetchAuctions();
-		fetchBids();
-		fetchWonAuctions();
-	}, []);
+	fetchUser();
+	fetchAuctions();
+	fetchBids();
+	fetchWonAuctions();
+}, []);
+
 
 	const handlePageChange = (page, type) => {
 		if (page > 0) {

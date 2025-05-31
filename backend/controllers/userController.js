@@ -39,6 +39,10 @@ const registerUser = async (req, res) => {
 	}
 };
 
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+
 const loginUser = async (req, res) => {
 	const { email, password } = req.body;
 
@@ -63,35 +67,33 @@ const loginUser = async (req, res) => {
 			expiresIn: "1d",
 		});
 
+	
 		res.cookie("jwt", token, {
 			httpOnly: true,
-			expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-			sameSite: "none",
-			secure: true,
+			secure: true, 
+			sameSite: "None", 
+			maxAge: 24 * 60 * 60 * 1000, 
 		});
 
+		
 		res.status(200).json({
 			id: user._id,
 			username: user.username,
 			email: user.email,
-			token,
 		});
 	} catch (error) {
-		console.error(error);
+		console.error("Login error:", error);
 		res.status(500).json({ message: "Internal server error" });
 	}
 };
 
+module.exports = loginUser;
+
+
 const getProfile = async (req, res) => {
 	try {
-		const token = req.headers.authorization.split(" ")[1];
-		const decoded = jwt.decode(token, process.env.JWT_SECRET);
-		if (!decoded) {
-			return res.status(401).json({ message: "Invalid token" });
-		}
-		const { id } = decoded;
+		const user = await User.findById(req.user.id).select("-password");
 
-		const user = await User.findById(id);
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });
 		}
@@ -102,23 +104,29 @@ const getProfile = async (req, res) => {
 			email: user.email,
 		});
 	} catch (error) {
-		res.status(500).json({ message: error.message });
+		console.error("Profile fetch error:", error);
+		res.status(500).json({ message: "Internal server error" });
 	}
 };
 
+
 const logoutUser = async (req, res) => {
 	try {
-		res.cookie("jwt", "", {
+		res.clearCookie("jwt", {
 			httpOnly: true,
 			secure: true,
-			sameSite: "none",
+			sameSite: "None",
 			expires: new Date(0),
 		});
 		res.status(200).json({ message: "Logged out successfully" });
 	} catch (error) {
-		res.status(500).json({ message: error.message });
+		console.error("Logout error:", error);
+		res.status(500).json({ message: "Internal server error" });
 	}
 };
+
+module.exports = logoutUser;
+
 
 module.exports = {
 	registerUser,
