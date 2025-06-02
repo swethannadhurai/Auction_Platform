@@ -117,9 +117,10 @@ const deleteAuctionItem = async (req, res) => {
 		res.status(500).json({ message: error.message });
 	}
 };
+ 
 
 const getAuctionWinner = async (req, res) => {
-	const { auctionId } = req.params; // <- fix here
+	const auctionId = req.params.id; 
 
 	try {
 		const auctionItem = await AuctionItem.findById(auctionId);
@@ -160,6 +161,7 @@ const getAuctionWinner = async (req, res) => {
 		res.status(500).json({ message: error.message });
 	}
 };
+
 
 
 const getAuctionsWonByUser = async (req, res) => {
