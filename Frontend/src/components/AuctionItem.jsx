@@ -38,9 +38,9 @@ function AuctionItem() {
      
 		const fetchUser = async () => {
 	try {
-		const res = await axios.post(
+		const res = await axios.get(
 			`https://auction-platform-ett9.onrender.com/api/users/profile`,
-			{},
+			
 			{
 				withCredentials: true, 
 			}
