@@ -60,9 +60,10 @@ function AuctionItem() {
 				);
 				setWinner(res.data.winner);
 			} catch (error) {
-				if (error.response.data.winner !== "") {
-					console.error("Error fetching auction winner:", error);
-				}
+				   if (error.response?.status !== 200) {
+	            console.error("Error fetching auction winner:", error.response?.data?.message || error.message);
+             }
+
 			}
 		};
 

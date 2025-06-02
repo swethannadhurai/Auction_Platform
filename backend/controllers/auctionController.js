@@ -118,41 +118,32 @@ const deleteAuctionItem = async (req, res) => {
 	}
 };
  
-
 const getAuctionWinner = async (req, res) => {
-	const auctionId = req.params.id; 
+	const auctionId = req.params.id;
 
 	try {
 		const auctionItem = await AuctionItem.findById(auctionId);
 		if (!auctionItem) {
-			return res
-				.status(404)
-				.json({ winner: "", message: "Auction item not found" });
+			return res.status(404).json({ winner: "", message: "Auction item not found" });
 		}
 
 		if (new Date(auctionItem.endDate) > new Date()) {
-			return res
-				.status(400)
-				.json({ winner: "", message: "Auction has not ended yet" });
+			return res.status(200).json({ winner: "", message: "Auction has not ended yet" });
 		}
 
 		const bids = await Bid.find({ auctionItemId: auctionId });
 		if (bids.length === 0) {
-			return res
-				.status(200)
-				.json({ winner: "", message: "No bids found" });
+			return res.status(200).json({ winner: "", message: "No bids found" });
 		}
 
-		let highestBid = bids.reduce(
+		const highestBid = bids.reduce(
 			(max, bid) => (bid.bidAmount > max.bidAmount ? bid : max),
 			bids[0]
 		);
 
 		const winner = await User.findById(highestBid.userId);
 		if (!winner) {
-			return res
-				.status(404)
-				.json({ winner: "", message: "Winner not found" });
+			return res.status(404).json({ winner: "", message: "Winner not found" });
 		}
 
 		res.status(200).json({ winner });
