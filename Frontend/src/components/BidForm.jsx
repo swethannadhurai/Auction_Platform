@@ -10,7 +10,7 @@ const BidForm = () => {
 
 	useEffect(() => {
 		const fetchAuctionItem = async () => {
-			const res = await axios.get("https://auction-platform-ett9.onrender.com/api/auctions/${id}");
+			const res = await axios.get(`https://auction-platform-ett9.onrender.com/api/auctions/${id}`);
 			setAuctionItem(res.data);
 			setBidAmount(res.data.startingBid || "");
 		};
@@ -22,7 +22,7 @@ const BidForm = () => {
 	e.preventDefault();
 	try {
 		await axios.post(
-			"https://auction-platform-ett9.onrender.com/api/bids",
+			`https://auction-platform-ett9.onrender.com/api/bids`,
 			{ auctionItemId: id, bidAmount },
 			{
 				withCredentials: true, 

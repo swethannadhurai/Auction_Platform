@@ -10,7 +10,7 @@ function Logout() {
 	useEffect(() => {
 		const logout = async () => {
 			try {
-				await axios.post("https://auction-platform-ett9.onrender.com/api/users/logout", {});
+				await axios.post(`https://auction-platform-ett9.onrender.com/api/users/logout`, {});
 				document.cookie =
 					"jwt=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
 				signout();
