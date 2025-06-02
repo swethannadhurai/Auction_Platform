@@ -45,9 +45,9 @@ function Profile() {
 
 	const fetchBids = async () => {
 		try {
-			const res = await axios.post(
+			const res = await axios.get(
 				`https://auction-platform-ett9.onrender.com/api/bids/user`,
-				{},
+				
 				{ withCredentials: true }
 			);
 			setBids(res.data.bids);
