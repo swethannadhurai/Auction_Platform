@@ -119,22 +119,23 @@ const deleteAuctionItem = async (req, res) => {
 };
 
 const getAuctionWinner = async (req, res) => {
-	const { id } = req.params;
+	const { auctionId } = req.params; // <- fix here
+
 	try {
-		const auctionItem = await AuctionItem.findById(id);
+		const auctionItem = await AuctionItem.findById(auctionId);
 		if (!auctionItem) {
 			return res
 				.status(404)
 				.json({ winner: "", message: "Auction item not found" });
 		}
 
-		if (new Date(auctionItem.endDate) > new Date(Date.now())) {
+		if (new Date(auctionItem.endDate) > new Date()) {
 			return res
 				.status(400)
 				.json({ winner: "", message: "Auction has not ended yet" });
 		}
 
-		const bids = await Bid.find({ auctionItemId: id });
+		const bids = await Bid.find({ auctionItemId: auctionId });
 		if (bids.length === 0) {
 			return res
 				.status(200)
@@ -159,6 +160,7 @@ const getAuctionWinner = async (req, res) => {
 		res.status(500).json({ message: error.message });
 	}
 };
+
 
 const getAuctionsWonByUser = async (req, res) => {
 	try {
