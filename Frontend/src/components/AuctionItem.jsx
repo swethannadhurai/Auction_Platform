@@ -287,10 +287,12 @@ function AuctionItem() {
 			)}
 			{auctionItem.createdBy !== user.id && !isAuctionEnded && (
 				<Link
-					to={`https://auction-platform-ett9.onrender.com/auction/bid/${id}`}>
-					  <button className="items-center justify-center block px-6 py-3 mt-6 text-center text-white bg-blue-700 rounded-lg ite hover:bg-blue-800">
-					Place a Bid </button>
-				</Link>
+                  to={`/auction/bid/${id}`}
+                  role="button"
+                  className="items-center justify-center block px-6 py-3 mt-6 text-center text-white bg-blue-700 rounded-lg ite hover:bg-blue-800" 
+               >Place a Bid
+               </Link>
+
 			)}
 		</div>
 	);
