@@ -19,7 +19,7 @@ const allowedOrigins = [
   process.env.FRONTEND_DEPLOY_URL
 ];
 
-app.use(
+/*app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) {
@@ -31,16 +31,15 @@ app.use(
     credentials: true,
     methods: ["GET", "PUT", "POST", "DELETE"]
   })
-);
-
-
-/*app.use(
-	cors({
-		origin: "https://zingy-dolphin-f24425.netlify.app",
-		methods: ["GET", "PUT", "POST", "DELETE"],
-		credentials: true,
-	})
 );*/
+
+
+app.use(cors({
+  origin: "https://zingy-dolphin-f24425.netlify.app", 
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"]
+}));
+
 
 
 app.use("/api/users", require("./routes/userRoutes"));

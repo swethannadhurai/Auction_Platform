@@ -20,7 +20,7 @@ function Profile() {
 	  const fetchUser = async () => {
 		try {
 			const res = await axios.get(
-				`${import.meta.env.VITE_API_URL}/api/users/profile`,
+				`https://auction-platform-ett9.onrender.com/api/users/profile`,
 				{ withCredentials: true }
 			);
 			setUser(res.data);
@@ -32,7 +32,7 @@ function Profile() {
 	const fetchAuctions = async () => {
 		try {
 			const res = await axios.post(
-				`${import.meta.env.VITE_API_URL}/api/auctions/user`,
+				`https://auction-platform-ett9.onrender.com/api/auctions/user`,
 				{},
 				{ withCredentials: true }
 			);
@@ -46,7 +46,7 @@ function Profile() {
 	const fetchBids = async () => {
 		try {
 			const res = await axios.post(
-				`${import.meta.env.VITE_API_URL}/api/bids/user`,
+				`https://auction-platform-ett9.onrender.com/api/bids/user`,
 				{},
 				{ withCredentials: true }
 			);
@@ -60,7 +60,7 @@ function Profile() {
 	const fetchWonAuctions = async () => {
 		try {
 			const res = await axios.post(
-				`${import.meta.env.VITE_API_URL}/api/auctions/won`,
+				`https://auction-platform-ett9.onrender.com/api/auctions/won`,
 				{},
 				{ withCredentials: true }
 			);
