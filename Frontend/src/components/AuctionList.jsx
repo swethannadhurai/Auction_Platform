@@ -91,7 +91,7 @@ function AuctionList() {
               >
               {item.image && (
              <img
-               src={item.image}
+               src={`https://auction-platform-ett9.onrender.com${item.image}`}
                alt={item.title}
                className="w-full h-48 object-cover rounded-md mb-4"
               />
