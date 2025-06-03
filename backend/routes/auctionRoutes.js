@@ -9,7 +9,7 @@ const {
 	getAuctionWinner,
 	getAuctionsWonByUser,
 } = require("../controllers/auctionController");
-const authMiddleware = require("../middleware/authMiddleware");
+const {authMiddleware} = require("../middleware/authMiddleware");
 const upload = require("../middleware/multerConfig");
 
 const router = express.Router();

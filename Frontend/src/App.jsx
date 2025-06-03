@@ -14,6 +14,12 @@ import Home from "./components/Home";
 import CreateAuctionItem from "./components/CreateAuctionItem";
 import EditAuctionItem from "./components/EditAuctionItem";
 
+import SellerDashboard from './pages/seller/SellerDashboard';
+import CreateProduct from './pages/seller/CreateProduct';
+import EditProduct from './pages/seller/EditProduct';
+import ManageAuctions from './pages/seller/ManageAuctions';
+import Inventory from './pages/seller/Inventory';
+
 function App() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -89,6 +95,12 @@ function App() {
 								</ProtectedRoute>
 							}
 						/>
+						<Route path="/seller" element={<SellerDashboard />}>
+                      <Route path="create-product" element={<CreateProduct />} />
+                     <Route path="edit-product" element={<EditProduct />} />
+                    <Route path="auctions" element={<ManageAuctions />} />
+                   <Route path="inventory" element={<Inventory />} />
+                  </Route>
 					</Routes>
 				</div>
 			</Router>

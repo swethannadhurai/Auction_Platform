@@ -273,7 +273,7 @@ function AuctionItem() {
 			{auctionItem.createdBy === user.id && (
 				<div className="flex justify-center mt-6 space-x-4">
 					<Link
-						to={`https://auction-platform-ett9.onrender.com/auction/edit/${id}`}
+						to={`/auction/edit/${id}`}
 						className="px-6 py-3 text-white bg-blue-700 rounded-lg hover:bg-blue-800"
 					>
 						Edit
