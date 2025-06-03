@@ -4,26 +4,29 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 const createAuctionItem = async (req, res) => {
-	const { title, description, startingBid, endDate } = req.body;
-	const userId = req.user.id;
+const { title, description, startingBid, endDate } = req.body;
 
-	try {
-		const newDate = new Date(new Date(endDate).getTime());
-		   
-		const imagePath = `/uploads/${req.file.filename}`;
-		const auctionItem = await AuctionItem.create({
-			title,
-			description,
-			startingBid,
-			image: imagePath,
-			endDate: newDate,
-			createdBy: userId,
-		});
+   if (!req.user || !req.user.id) {
+   return res.status(401).json({ message: "Unauthorized" });
+   }
 
-		res.status(201).json(auctionItem);
-	} catch (error) {
-		res.status(500).json({ message: error.message });
-	}
+  try {
+    const newDate = new Date(endDate);
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const auctionItem = await AuctionItem.create({
+    title,
+    description,
+    startingBid,
+    image: imagePath,
+    endDate: newDate,
+    createdBy: req.user.id,
+  });
+
+  res.status(201).json(auctionItem);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 const getAuctionItems = async (req, res) => {

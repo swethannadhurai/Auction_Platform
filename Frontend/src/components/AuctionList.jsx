@@ -84,30 +84,38 @@ function AuctionList() {
 				/>
 			</div>
 			<ul className="space-y-4">
-				{paginatedItems.map((item) => (
-					<li
-						key={item._id}
-						className="border border-gray-700 rounded-lg p-4 bg-gray-800 shadow-md"
-					>
-						<Link
-							to={`/auction/${item._id}`}
-							className="text-indigo-400 hover:underline text-lg font-semibold"
-						>
-							{item.title}
-						</Link>
-						<p className="text-gray-300 mt-2">
-							<b>{item.description}</b>
-						</p>
-						<p className="text-gray-400 mt-2">
-							<b>Starting Bid:</b> ${item.startingBid}
-						</p>
-						<p className="text-gray-400 mt-2">
-							<b>End Date: </b>
-							{new Date(item.endDate).toLocaleDateString()}
-						</p>
-					</li>
-				))}
-			</ul>
+             {paginatedItems.map((item) => (
+             <li
+                key={item._id}
+                className="border border-gray-700 rounded-lg p-4 bg-gray-800 shadow-md"
+              >
+              {item.image && (
+             <img
+               src={item.image}
+               alt={item.title}
+               className="w-full h-48 object-cover rounded-md mb-4"
+              />
+               )}
+             <Link
+              to={`/auction/${item._id}`}
+                  className="text-indigo-400 hover:underline text-lg font-semibold"
+                >
+             {item.title}
+             </Link>
+              <p className="text-gray-300 mt-2">
+              <b>{item.description}</b>
+             </p>
+                 <p className="text-gray-400 mt-2">
+                <b>Starting Bid:</b> ${item.startingBid}
+             </p>
+             <p className="text-gray-400 mt-2">
+                <b>End Date: </b>
+                {new Date(item.endDate).toLocaleDateString()}
+             </p>
+            </li>
+           ))}
+          </ul>
+
 			<div className="mt-6 flex justify-between items-center">
 				<button
 					onClick={() => handlePageChange(currentPage - 1)}
