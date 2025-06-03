@@ -16,7 +16,7 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"]
 }));
 
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use(cookieParser());
 app.use(express.json());
 
