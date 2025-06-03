@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const NavBar = () => {
-	const { isLoggedIn } = useAuth();
+
+	const { isLoggedIn, user } = useAuth();
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
@@ -83,6 +84,16 @@ const NavBar = () => {
 										Profile
 									</Link>
 								</li>
+								{user?.role === "seller" && (
+									<li>
+										<Link
+											className="text-white hover:text-gray-300 text-lg"
+											to="/seller/dashboard"
+										>
+											Seller Dashboard
+										</Link>
+									</li>
+								)}
 								<li>
 									<Link
 										className="text-white hover:text-gray-300 text-lg"

@@ -18,10 +18,12 @@ const authMiddleware = async (req, res, next) => {
 	}
 };
 
+
 const sellerOnly = (req, res, next) => {
-  if (req.user.role !== 'seller') return res.status(403).json({ error: 'Access denied' });
+  if (req.user.role !== 'seller') {
+    return res.status(403).json({ message: 'Access denied: Sellers only' });
+  }
   next();
 };
-
 
 module.exports = { authMiddleware, sellerOnly };
