@@ -1,6 +1,6 @@
 // server/controllers/dashboardController.js
 const Product = require('../models/Product');
-const Auction = require('../models/Auction');
+const Auction = require('../models/AuctionItem');
 
 const getDashboardStats = async (req, res) => {
   try {
