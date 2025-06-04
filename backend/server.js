@@ -5,6 +5,7 @@ const cors = require("cors");
 const path = require("path");
 const cookieParser = require('cookie-parser');
 const {authMiddleware} = require("./middleware/authMiddleware");
+const User = require("./models/User");
 
 dotenv.config();
 connectDB();
@@ -26,6 +27,9 @@ app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/auctions", require("./routes/auctionRoutes"));
 app.use("/api/bids", require("./routes/bidRoutes"));
 app.use('/api/seller', require('./routes/sellerRoutes'));
+app.use('/api/seller/auth', require('./routes/sellerAuthRoutes'));
+app.use('/api/seller', require('./routes/sellerAuctionRoutes'));
+
 
 
 app.get("/api/auth/me", authMiddleware, async (req, res) => {

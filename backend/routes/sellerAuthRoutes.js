@@ -1,3 +1,4 @@
+// routes/sellerAuthRoutes.js
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
@@ -5,38 +6,46 @@ const generateToken = require('../utils/generateToken');
 
 const router = express.Router();
 
-// POST /api/seller/register
+// POST /api/seller/auth/register
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
-  const userExists = await User.findOne({ email });
-  if (userExists) return res.status(400).json({ error: 'Email already in use' });
+  try {
+    const userExists = await User.findOne({ email });
+    if (userExists) return res.status(400).json({ error: 'Email already in use' });
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  const seller = new User({ name, email, password: hashedPassword, role: 'seller' });
-  await seller.save();
+    const seller = new User({ name, email, password: hashedPassword, role: 'seller' });
+    await seller.save();
 
-  generateToken(res, seller._id);
-  res.status(201).json({ message: 'Seller registered successfully' });
+    generateToken(res, seller._id);
+    res.status(201).json({ message: 'Seller registered successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error during registration' });
+  }
 });
 
-// POST /api/seller/login
+// POST /api/seller/auth/login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
-  const isMatch = user && await bcrypt.compare(password, user.password);
+  try {
+    const user = await User.findOne({ email });
+    const isMatch = user && await bcrypt.compare(password, user.password);
 
-  if (!user || !isMatch || user.role !== 'seller') {
-    return res.status(401).json({ error: 'Invalid credentials or not a seller' });
+    if (!user || !isMatch || user.role !== 'seller') {
+      return res.status(401).json({ error: 'Invalid credentials or not a seller' });
+    }
+
+    generateToken(res, user._id);
+    res.json({ message: 'Logged in as seller' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error during login' });
   }
-
-  generateToken(res, user._id);
-  res.json({ message: 'Logged in as seller' });
 });
 
-// POST /api/seller/logout
+// POST /api/seller/auth/logout
 router.post('/logout', (req, res) => {
   res.clearCookie('jwt');
   res.json({ message: 'Logged out successfully' });
