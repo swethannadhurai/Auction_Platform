@@ -75,36 +75,39 @@ const NavBar = () => {
 							</>
 						)}
 						{isLoggedIn && (
-							<>
-								<li>
-									<Link
-										className="text-white hover:text-gray-300 text-lg"
-										to="/profile"
-									>
-										Profile
-									</Link>
-								</li>
-								{user?.role === "seller" && (
-									<li>
-										<Link
-											className="text-white hover:text-gray-300 text-lg"
-											to="/seller/dashboard"
-										>
-											Seller Dashboard
-										</Link>
-									</li>
-								)}
-								<li>
-									<Link
-										className="text-white hover:text-gray-300 text-lg"
-										to="/logout"
-									>
-										Logout
-									</Link>
-								</li>
-							</>
-						)}
-					</ul>
+                          <>
+                          <li>
+                         <Link
+                             className="text-white hover:text-gray-300 text-lg"
+                             to="/profile"
+                         >
+                          Profile
+                         </Link>
+                        </li>
+
+                       {user?.role === 'seller' && (
+                       <li>
+                      <Link
+                          to="/seller/dashboard"
+                         className="text-white hover:text-gray-300 text-lg"
+                       >
+                          Seller Dashboard
+                    </Link>
+                    </li>
+                    )}
+
+    <li>
+      <Link
+        className="text-white hover:text-gray-300 text-lg"
+        to="/logout"
+      >
+        Logout
+      </Link>
+    </li>
+  </>
+)}
+</ul>
+
 				</div>
 			</div>
 		</nav>

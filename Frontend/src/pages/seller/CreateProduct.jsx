@@ -19,7 +19,7 @@ function CreateProduct() {
     e.preventDefault();
     try {
       await axios.post(
-        'http://localhost:5000/api/seller/products',
+        `https://auction-platform-ett9.onrender.com/api/seller/products`,
         form,
         { withCredentials: true }
       );

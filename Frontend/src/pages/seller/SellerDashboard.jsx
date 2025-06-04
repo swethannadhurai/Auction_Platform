@@ -1,6 +1,5 @@
 import { Outlet } from 'react-router-dom';
 import SellerSidebar from '../../components/SellerSidebar';
-
 function SellerDashboard() {
   return (
     <div className="flex">
