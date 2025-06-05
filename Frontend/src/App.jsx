@@ -121,15 +121,14 @@ function AppRoutes() {
 }
 
 function App() {
-	return (
-		<AuthProvider>
-			<Router>
-				<AppRoutes />
-			</Router>
-		</AuthProvider>
-	);
+  return (
+    <Router>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </Router>
+  );
 }
-
 export default App;
 
 

@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
+  const [loading, setLoading] = useState(true); // <-- Add loading state here
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +26,8 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         setRole(null);
         setIsLoggedIn(false);
+      } finally {
+        setLoading(false); // <-- Set loading false when done
       }
     };
 
@@ -47,16 +50,17 @@ export const AuthProvider = ({ children }) => {
       setIsLoggedIn(false);
       setUser(null);
       setRole(null);
-      navigate("/login"); // Navigate without full reload
+      navigate("/login");
     } catch (error) {
       console.error("Logout failed", error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, role, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, user, role, login, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
-

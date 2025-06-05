@@ -21,28 +21,27 @@ ProtectedRoute.propTypes = {
 
 export default ProtectedRoute;*/
 
-import { useLocation, Navigate } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../contexts";
 
+import { useLocation, Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-	const location = useLocation();
-	const { isLoggedIn, user, loading } = useContext(AuthContext);
+  const location = useLocation();
+  const { isLoggedIn, user, loading } = useAuth();
 
-	if (loading) {
-		return <div className="text-center mt-4">Checking authentication...</div>;
-	}
+  if (loading) {
+    return <div className="text-center mt-4">Checking authentication...</div>;
+  }
 
-	if (!isLoggedIn) {
-		return <Navigate to="/login" state={{ from: location }} replace />;
-	}
+  if (!isLoggedIn) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
 
-	if (allowedRoles && !allowedRoles.includes(user?.role)) {
-		return <Navigate to="/" replace />;
-	}
+  if (allowedRoles && !allowedRoles.includes(user?.role)) {
+    return <Navigate to="/" replace />;
+  }
 
-	return children;
+  return children;
 };
 
 export default ProtectedRoute;
