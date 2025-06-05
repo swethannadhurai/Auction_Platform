@@ -1,3 +1,4 @@
+// src/contexts/AuthContext.js
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
-  const [loading, setLoading] = useState(true); // <-- Add loading state here
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         setRole(null);
         setIsLoggedIn(false);
       } finally {
-        setLoading(false); // <-- Set loading false when done
+        setLoading(false);
       }
     };
 

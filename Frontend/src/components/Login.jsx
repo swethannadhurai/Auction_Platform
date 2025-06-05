@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { FiMail, FiLock } from "react-icons/fi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -8,18 +8,11 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [role, setRole] = useState("user"); 
+	const [role, setRole] = useState("user");
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
-	const { isLoggedIn, login } = useAuth();
-	const location = useLocation();
-
-	useEffect(() => {
-		if (isLoggedIn && location.pathname !== "/profile") {
-			navigate("/profile");
-		}
-	}, [isLoggedIn, navigate, location.pathname]);
+	const { login } = useAuth(); 
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -38,11 +31,11 @@ function Login() {
 				{ withCredentials: true }
 			);
 
-			  if (res.status === 200) {
-	          const userData = res.data.user;
-	          login({ ...userData, role }); 
-	          navigate(role === "seller" ? "/seller" : "/profile"); 
-           }
+			if (res.status === 200) {
+				const userData = res.data.user;
+				login(userData); 
+				navigate(userData.role === "seller" ? "/seller" : "/profile"); 
+			}
 		} catch (err) {
 			setError(err.response?.data?.message || "An error occurred");
 			console.error(err);
@@ -64,7 +57,7 @@ function Login() {
 					Login
 				</h2>
 				<form onSubmit={handleLogin} className="space-y-4">
-					{/* Role Selector */}
+					
 					<div className="mb-4">
 						<label className="text-white mr-4">Login as:</label>
 						<select
@@ -77,7 +70,7 @@ function Login() {
 						</select>
 					</div>
 
-					{/* Email Field */}
+					
 					<div className="flex items-center border rounded-md border-gray-600 bg-gray-700">
 						<FiMail className="w-6 h-6 text-gray-400 ml-3" />
 						<input
@@ -90,7 +83,7 @@ function Login() {
 						/>
 					</div>
 
-					{/* Password Field */}
+					
 					<div className="flex items-center border rounded-md border-gray-600 bg-gray-700">
 						<FiLock className="w-6 h-6 text-gray-400 ml-3" />
 						<input
