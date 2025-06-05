@@ -14,6 +14,33 @@ const generateToken = (user) => {
   );
 };
 
+// Temporary: Register Seller (for testing)
+router.post("/register-seller", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const existingSeller = await Seller.findOne({ email });
+    if (existingSeller) {
+      return res.status(400).json({ message: "Seller already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newSeller = new Seller({
+      name,
+      email,
+      password: hashedPassword,
+      role: "seller"
+    });
+
+    await newSeller.save();
+    res.status(201).json({ message: "Seller registered successfully" });
+  } catch (error) {
+    console.error("Error registering seller:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 // Buyer login
 router.post("/login-user", async (req, res) => {
   const { email, password } = req.body;
