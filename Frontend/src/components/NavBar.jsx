@@ -65,6 +65,9 @@ const NavBar = () => {
 									</Link>
 								</li>
 								<li>
+								<Link to="/seller-login" className="text-indigo-300 hover:underline">Login as Seller</Link>
+                                </li>
+								<li>
 									<Link
 										className="text-white hover:text-gray-300 text-lg"
 										to="/signup"

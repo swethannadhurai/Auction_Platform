@@ -13,7 +13,7 @@ import NavBar from "./components/NavBar";
 import Home from "./components/Home";
 import CreateAuctionItem from "./components/CreateAuctionItem";
 import EditAuctionItem from "./components/EditAuctionItem";
-
+import SellerLogin from "./components/SellerLogin";
 import SellerDashboard from './pages/seller/SellerDashboard';
 import CreateProduct from './pages/seller/CreateProduct';
 import EditProduct from './pages/seller/EditProduct';
@@ -91,6 +91,8 @@ function AppRoutes() {
 					/>
 
 					{/* Seller Dashboard Routes */}
+					<Route path="/seller-login" element={<SellerLogin />} />
+
 					<Route path="/seller" element={<SellerDashboard />}>
 						<Route path="create-product" element={<CreateProduct />} />
 						<Route path="edit-product" element={<EditProduct />} />

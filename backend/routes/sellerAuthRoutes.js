@@ -1,58 +1,70 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const generateToken = require('../utils/generateToken');
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const User = require("../models/User");
+const Seller = require("../models/Seller");
 
 const router = express.Router();
 
-// @route   POST /api/seller/auth/register
-// @desc    Register new seller
-router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
+const generateToken = (user) => {
+  return jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+};
 
-  try {
-    const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ error: 'Email already in use' });
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const seller = new User({ name, email, password: hashedPassword, role: 'seller' });
-    await seller.save();
-
-    generateToken(res, seller._id);
-    res.status(201).json({ message: 'Seller registered successfully' });
-  } catch (error) {
-    console.error('Seller registration error:', error);
-    res.status(500).json({ error: 'Server error during registration' });
-  }
-});
-
-// @route   POST /api/seller/auth/login
-// @desc    Login seller
-router.post('/login', async (req, res) => {
+// Buyer login
+router.post("/login-user", async (req, res) => {
   const { email, password } = req.body;
 
-  try {
-    const user = await User.findOne({ email });
-    const isMatch = user && await bcrypt.compare(password, user.password);
-
-    if (!user || !isMatch || user.role !== 'seller') {
-      return res.status(401).json({ error: 'Invalid credentials or not a seller' });
-    }
-
-    generateToken(res, user._id);
-    res.json({ message: 'Logged in as seller' });
-  } catch (error) {
-    console.error('Seller login error:', error);
-    res.status(500).json({ error: 'Server error during login' });
+  const user = await User.findOne({ email });
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return res.status(401).json({ message: "Invalid credentials" });
   }
+
+  const token = generateToken(user);
+
+  res.cookie("jwt", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
+  res.json({ message: "User login successful", role: "user" });
 });
 
-// @route   POST /api/seller/auth/logout
-// @desc    Logout seller
-router.post('/logout', (req, res) => {
-  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
-  res.json({ message: 'Logged out successfully' });
+// Seller login
+router.post("/login-seller", async (req, res) => {
+  const { email, password } = req.body;
+
+  const seller = await Seller.findOne({ email });
+  if (!seller || !(await bcrypt.compare(password, seller.password))) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  const token = generateToken(seller);
+
+  res.cookie("jwt", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  res.json({ message: "Seller login successful", role: "seller" });
 });
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+});
+
 
 module.exports = router;
+

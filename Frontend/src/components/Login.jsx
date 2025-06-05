@@ -1,41 +1,46 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { FiMail, FiLock } from "react-icons/fi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useLocation } from "react-router-dom";
-
 
 function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [role, setRole] = useState("user"); 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 	const { isLoggedIn, login } = useAuth();
-
 	const location = useLocation();
 
-        useEffect(() => {
-           if (isLoggedIn && location.pathname !== "/profile") {
-             navigate("/profile");
-           }
-        }, [isLoggedIn, navigate, location.pathname]);
+	useEffect(() => {
+		if (isLoggedIn && location.pathname !== "/profile") {
+			navigate("/profile");
+		}
+	}, [isLoggedIn, navigate, location.pathname]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
 		setLoading(true);
+		setError("");
+
 		try {
+			const loginUrl =
+				role === "seller"
+					? "https://auction-platform-ett9.onrender.com/api/auth/login-seller"
+					: "https://auction-platform-ett9.onrender.com/api/users/login";
+
 			const res = await axios.post(
-				`https://auction-platform-ett9.onrender.com/api/users/login`,
+				loginUrl,
 				{ email, password },
 				{ withCredentials: true }
 			);
+
 			if (res.status === 200) {
 				login();
-				navigate("/profile");
-			
+				navigate(role === "seller" ? "/seller-dashboard" : "/profile");
 			}
 		} catch (err) {
 			setError(err.response?.data?.message || "An error occurred");
@@ -58,6 +63,20 @@ function Login() {
 					Login
 				</h2>
 				<form onSubmit={handleLogin} className="space-y-4">
+					{/* Role Selector */}
+					<div className="mb-4">
+						<label className="text-white mr-4">Login as:</label>
+						<select
+							value={role}
+							onChange={(e) => setRole(e.target.value)}
+							className="px-2 py-1 rounded bg-gray-700 text-white border border-gray-600"
+						>
+							<option value="user">User</option>
+							<option value="seller">Seller</option>
+						</select>
+					</div>
+
+					{/* Email Field */}
 					<div className="flex items-center border rounded-md border-gray-600 bg-gray-700">
 						<FiMail className="w-6 h-6 text-gray-400 ml-3" />
 						<input
@@ -69,6 +88,8 @@ function Login() {
 							required
 						/>
 					</div>
+
+					{/* Password Field */}
 					<div className="flex items-center border rounded-md border-gray-600 bg-gray-700">
 						<FiLock className="w-6 h-6 text-gray-400 ml-3" />
 						<input
@@ -80,13 +101,11 @@ function Login() {
 							required
 						/>
 					</div>
+
 					<div className="flex items-center justify-between mt-4">
 						<p className="text-white">
 							Don{"'"}t have an account?{" "}
-							<Link
-								to="/signup"
-								className="text-indigo-300 hover:underline"
-							>
+							<Link to="/signup" className="text-indigo-300 hover:underline">
 								Signup
 							</Link>
 						</p>
@@ -103,6 +122,7 @@ function Login() {
 						</button>
 					</div>
 				</form>
+
 				{error && (
 					<div className="mt-4 text-red-300 text-center">{error}</div>
 				)}

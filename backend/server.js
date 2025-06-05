@@ -6,6 +6,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const { authMiddleware } = require("./middleware/authMiddleware");
 const User = require("./models/User");
+const Seller = require("./models/Seller");
 
 dotenv.config();
 connectDB();
@@ -38,16 +39,27 @@ app.use('/api/seller', require('./routes/sellerAuctionRoutes'));
  
 
 
+
+
 app.get("/api/auth/me", authMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
-    if (!user) return res.status(404).json({ message: "User not found" });
+    let user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      user = await Seller.findById(req.user.id).select("-password");
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     res.json(user);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 
 app.get("/", (req, res) => {
