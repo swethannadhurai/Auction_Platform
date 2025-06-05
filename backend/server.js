@@ -32,10 +32,10 @@ app.use("/api/auctions", require("./routes/auctionRoutes"));
 app.use("/api/bids", require("./routes/bidRoutes"));
 
 
-app.use("/api/seller/auth", require("./routes/sellerAuthRoutes"));
-app.use("/api/seller/auctions", require("./routes/sellerAuctionRoutes"));
-app.use('/api/seller', require('./routes/sellerRoutes'));
-//app.use("/api/seller/inventory", require("./routes/sellerInventoryRoutes")); 
+app.use('/api/seller/auth', require('./routes/sellerAuthRoutes'));
+app.use('/api/seller/products', require('./routes/sellerRoutes'));
+app.use('/api/seller', require('./routes/sellerAuctionRoutes'));
+ 
 
 
 app.get("/api/auth/me", authMiddleware, async (req, res) => {

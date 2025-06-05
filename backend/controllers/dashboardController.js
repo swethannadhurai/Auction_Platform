@@ -2,7 +2,7 @@
 const Product = require('../models/Product');
 const Auction = require('../models/AuctionItem');
 
-// Get dashboard stats for the seller
+
 const getDashboardStats = async (req, res) => {
   try {
     const sellerId = req.user.id;
@@ -24,7 +24,7 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
-// Create a new auction (seller only)
+
 const createAuction = async (req, res) => {
   try {
     const { title, description, startingBid, endDate } = req.body;
@@ -35,7 +35,7 @@ const createAuction = async (req, res) => {
       startingBid,
       endDate,
       seller: req.user._id,
-      status: 'active' // default to 'active'
+      status: 'active' 
     });
 
     await auction.save();

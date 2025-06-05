@@ -1,4 +1,3 @@
-// routes/sellerAuthRoutes.js
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
@@ -6,7 +5,8 @@ const generateToken = require('../utils/generateToken');
 
 const router = express.Router();
 
-// POST /api/seller/auth/register
+// @route   POST /api/seller/auth/register
+// @desc    Register new seller
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -22,11 +22,13 @@ router.post('/register', async (req, res) => {
     generateToken(res, seller._id);
     res.status(201).json({ message: 'Seller registered successfully' });
   } catch (error) {
+    console.error('Seller registration error:', error);
     res.status(500).json({ error: 'Server error during registration' });
   }
 });
 
-// POST /api/seller/auth/login
+// @route   POST /api/seller/auth/login
+// @desc    Login seller
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -41,15 +43,16 @@ router.post('/login', async (req, res) => {
     generateToken(res, user._id);
     res.json({ message: 'Logged in as seller' });
   } catch (error) {
+    console.error('Seller login error:', error);
     res.status(500).json({ error: 'Server error during login' });
   }
 });
 
-// POST /api/seller/auth/logout
+// @route   POST /api/seller/auth/logout
+// @desc    Logout seller
 router.post('/logout', (req, res) => {
-  res.clearCookie('jwt');
+  res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
   res.json({ message: 'Logged out successfully' });
 });
 
 module.exports = router;
-
