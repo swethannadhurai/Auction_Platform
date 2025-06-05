@@ -38,10 +38,11 @@ function Login() {
 				{ withCredentials: true }
 			);
 
-			if (res.status === 200) {
-				login(res.data.user);
-				navigate(role === "seller" ? "/seller-dashboard" : "/profile");
-			}
+			  if (res.status === 200) {
+	          const userData = res.data.user;
+	          login({ ...userData, role }); 
+	          navigate(role === "seller" ? "/seller" : "/profile"); 
+           }
 		} catch (err) {
 			setError(err.response?.data?.message || "An error occurred");
 			console.error(err);

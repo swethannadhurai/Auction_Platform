@@ -80,7 +80,8 @@ router.post("/login-seller", async (req, res) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  res.json({ message: "Seller login successful", role: "seller" });
+  res.json({ user: seller, message: "Seller login successful", role: "seller" });
+
 });
 
 router.post("/logout", (req, res) => {
