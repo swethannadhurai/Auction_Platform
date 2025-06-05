@@ -35,7 +35,8 @@ export const AuthProvider = ({ children }) => {
     setRole(userData.role);
   };
 
-  const logout = async () => {
+ const logout = async () => {
+  try {
     await axios.post(
       `${import.meta.env.VITE_API_URL}/api/auth/logout`,
       {},
@@ -44,7 +45,11 @@ export const AuthProvider = ({ children }) => {
     setIsLoggedIn(false);
     setUser(null);
     setRole(null);
-  };
+    window.location.href = "/login"; 
+  } catch (error) {
+    console.error("Logout failed", error);
+  }
+};
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, user, role, login, logout }}>

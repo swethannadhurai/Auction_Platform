@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const { authMiddleware } = require("./middleware/authMiddleware");
 const User = require("./models/User");
 const Seller = require("./models/Seller");
-const sellerAuthRoutes = require("./routes/sellerAuthRoutes");
+
 
 dotenv.config();
 connectDB();
@@ -34,12 +34,10 @@ app.use("/api/auctions", require("./routes/auctionRoutes"));
 app.use("/api/bids", require("./routes/bidRoutes"));
 
 
-app.use('/api/seller/auth', require('./routes/sellerAuthRoutes'));
+/*app.use('/api/seller/auth', require('./routes/sellerAuthRoutes'));*/
 app.use('/api/seller/products', require('./routes/sellerRoutes'));
 app.use('/api/seller', require('./routes/sellerAuctionRoutes'));
-
-
- 
+app.use("/api/auth", require('./routes/sellerAuthRoutes'));
 
 
 
