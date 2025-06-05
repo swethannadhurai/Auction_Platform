@@ -102,7 +102,7 @@ function AppRoutes() {
 
 					<Route path="/seller-signup" element={<SellerSignup />} />
 					<Route path="/seller-login" element={<SellerLogin />} />
-					<Route path="/seller" element={<SellerDashboard />}>
+					<Route path="/seller-dashboard" element={<SellerDashboard />}>
 						<Route path="create-product" element={<CreateProduct />} />
 						<Route path="edit-product" element={<EditProduct />} />
 						<Route path="auctions" element={<ManageAuctions />} />

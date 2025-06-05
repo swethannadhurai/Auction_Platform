@@ -29,7 +29,8 @@ function SellerSignup() {
     try {
       const res = await axios.post(
         "https://auction-platform-ett9.onrender.com/api/auth/register-seller",
-        { name, email, password }
+        { name, email, password },
+        { withCredentials: true } 
       );
 
       if (res.status === 201) {

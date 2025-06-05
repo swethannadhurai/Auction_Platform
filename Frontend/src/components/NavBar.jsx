@@ -91,7 +91,7 @@ const NavBar = () => {
                        {user?.role === 'seller' && (
                        <li>
                       <Link
-                          to="/seller/dashboard"
+                          to="/seller-dashboard"
                          className="text-white hover:text-gray-300 text-lg"
                        >
                           Seller Dashboard
