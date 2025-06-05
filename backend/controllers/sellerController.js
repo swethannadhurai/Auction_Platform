@@ -82,6 +82,18 @@ const loginSeller = async (req, res) => {
   }
 };
 
+const getSellerProfile = async (req, res) => {
+  try {
+    const seller = await Seller.findById(req.user._id).select("-password");
+    if (!seller) {
+      return res.status(404).json({ message: "Seller not found" });
+    }
+    res.json(seller);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const logoutSeller = (req, res) => {
   res.clearCookie('jwt');
   res.json({ message: 'Logged out' });
@@ -91,6 +103,7 @@ module.exports = {
   registerSeller,
   loginSeller,
   logoutSeller,
+  getSellerProfile,
   createProduct,
   getProducts,
   updateProduct,
