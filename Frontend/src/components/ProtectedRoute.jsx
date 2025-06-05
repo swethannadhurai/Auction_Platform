@@ -25,16 +25,24 @@ import { useLocation, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../contexts";
 
-const ProtectedRoute = ({ children }) => {
-	const location = useLocation();
-	const { isLoggedIn } = useContext(AuthContext);
 
-	return isLoggedIn ? (
-		children
-	) : (
-		<Navigate to="/login" state={{ from: location }} replace />
-	);
+const ProtectedRoute = ({ children, allowedRoles }) => {
+	const location = useLocation();
+	const { isLoggedIn, user, loading } = useContext(AuthContext);
+
+	if (loading) {
+		return <div className="text-center mt-4">Checking authentication...</div>;
+	}
+
+	if (!isLoggedIn) {
+		return <Navigate to="/login" state={{ from: location }} replace />;
+	}
+
+	if (allowedRoles && !allowedRoles.includes(user?.role)) {
+		return <Navigate to="/" replace />;
+	}
+
+	return children;
 };
 
 export default ProtectedRoute;
-

@@ -14,27 +14,27 @@ import Home from "./components/Home";
 import CreateAuctionItem from "./components/CreateAuctionItem";
 import EditAuctionItem from "./components/EditAuctionItem";
 import SellerLogin from "./components/SellerLogin";
-import SellerDashboard from './pages/seller/SellerDashboard';
-import CreateProduct from './pages/seller/CreateProduct';
-import EditProduct from './pages/seller/EditProduct';
-import ManageAuctions from './pages/seller/ManageAuctions';
-import Inventory from './pages/seller/Inventory';
+import SellerDashboard from "./pages/seller/SellerDashboard";
+import CreateProduct from "./pages/seller/CreateProduct";
+import EditProduct from "./pages/seller/EditProduct";
+import ManageAuctions from "./pages/seller/ManageAuctions";
+import Inventory from "./pages/seller/Inventory";
 
 function AppRoutes() {
 	const { user, isLoggedIn, login, logout } = useAuth();
 
-	const token = document.cookie
-		.split("; ")
-		.find((row) => row.startsWith("jwt="))
-		?.split("=")[1];
-
 	useEffect(() => {
-		if (token) {
+		const jwtToken = document.cookie
+			.split("; ")
+			.find((row) => row.startsWith("jwt="))
+			?.split("=")[1];
+
+		if (jwtToken) {
 			login();
 		} else {
 			logout();
 		}
-	}, [token]);
+	}, []); // ✅ only run on initial render
 
 	console.log("Logged-in user:", user);
 	console.log("User role:", user?.role);
@@ -89,10 +89,18 @@ function AppRoutes() {
 							</ProtectedRoute>
 						}
 					/>
+					<Route
+                        path="/seller/inventory"
+                        element={
+                         <ProtectedRoute allowedRoles={['seller']}>
+                                 <Inventory />
+                         </ProtectedRoute>
+                         }
+                    />
+
 
 					{/* Seller Dashboard Routes */}
 					<Route path="/seller-login" element={<SellerLogin />} />
-
 					<Route path="/seller" element={<SellerDashboard />}>
 						<Route path="create-product" element={<CreateProduct />} />
 						<Route path="edit-product" element={<EditProduct />} />
@@ -123,4 +131,5 @@ function App() {
 }
 
 export default App;
+
 

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -7,17 +8,18 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null); // NEW: role = 'user' | 'seller'
+  const [role, setRole] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/auth/me`,
+          `https://auction-platform-ett9.onrender.com/api/auth/me`,
           { withCredentials: true }
         );
         setUser(res.data);
-        setRole(res.data.role); // Make sure your /me endpoint returns role
+        setRole(res.data.role);
         setIsLoggedIn(true);
       } catch (error) {
         setUser(null);
@@ -35,21 +37,21 @@ export const AuthProvider = ({ children }) => {
     setRole(userData.role);
   };
 
- const logout = async () => {
-  try {
-    await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/auth/logout`,
-      {},
-      { withCredentials: true }
-    );
-    setIsLoggedIn(false);
-    setUser(null);
-    setRole(null);
-    window.location.href = "/login"; 
-  } catch (error) {
-    console.error("Logout failed", error);
-  }
-};
+  const logout = async () => {
+    try {
+      await axios.post(
+        `https://auction-platform-ett9.onrender.com/api/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+      setIsLoggedIn(false);
+      setUser(null);
+      setRole(null);
+      navigate("/login"); // Navigate without full reload
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, user, role, login, logout }}>
