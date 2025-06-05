@@ -39,7 +39,7 @@ function Login() {
 			);
 
 			if (res.status === 200) {
-				login();
+				login(res.data.user);
 				navigate(role === "seller" ? "/seller-dashboard" : "/profile");
 			}
 		} catch (err) {
