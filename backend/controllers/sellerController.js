@@ -3,7 +3,7 @@ const Product = require('../models/Product');
 const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken'); 
 
-// Create Product
+
 const createProduct = async (req, res) => {
   const { name, price, quantity, category } = req.body;
   try {
@@ -14,7 +14,6 @@ const createProduct = async (req, res) => {
   }
 };
 
-// Get Seller's Products
 const getProducts = async (req, res) => {
   try {
     const products = await Product.find({ seller: req.user.id });
@@ -24,7 +23,7 @@ const getProducts = async (req, res) => {
   }
 };
 
-// Update Product
+
 const updateProduct = async (req, res) => {
   try {
     const updated = await Product.findOneAndUpdate(
@@ -38,7 +37,7 @@ const updateProduct = async (req, res) => {
   }
 };
 
-// Delete Product
+
 const deleteProduct = async (req, res) => {
   try {
     await Product.findOneAndDelete({ _id: req.params.id, seller: req.user.id });
@@ -48,7 +47,7 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-// Optional: Keep for internal registration testing (but prefer sellerAuthRoutes.js)
+
 const registerSeller = async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -58,14 +57,14 @@ const registerSeller = async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
     const seller = await Seller.create({ name, email, password: hashed, role: 'seller' });
 
-    generateToken(res, seller._id); // Use standard utility
+    generateToken(res, seller); 
     res.status(201).json({ message: 'Seller registered' });
   } catch (err) {
     res.status(500).json({ error: 'Registration failed' });
   }
 };
 
-// Optional: Keep for internal login testing (but prefer sellerAuthRoutes.js)
+
 const loginSeller = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -75,12 +74,22 @@ const loginSeller = async (req, res) => {
     const match = await bcrypt.compare(password, seller.password);
     if (!match) return res.status(400).json({ error: 'Invalid credentials' });
 
-    generateToken(res, seller._id);
-    res.json({ message: 'Login successful' });
+    generateToken(res, seller);
+
+    
+    const sellerData = {
+      _id: seller._id,
+      name: seller.name,
+      email: seller.email,
+      role: seller.role,
+    };
+
+    res.json(sellerData);  
   } catch (err) {
     res.status(500).json({ error: 'Login failed' });
   }
 };
+
 
 const getSellerProfile = async (req, res) => {
   try {

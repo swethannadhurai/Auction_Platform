@@ -20,8 +20,10 @@ export const AuthProvider = ({ children }) => {
           `https://auction-platform-ett9.onrender.com/api/auth/me`,
           { withCredentials: true }
         );
-        setUser(res.data);
-        setRole(res.data.role);
+
+        const userData = res.data.user || res.data; // safe fallback
+        setUser(userData);
+        setRole(userData.role || null);
         setIsLoggedIn(true);
       } catch (error) {
         setUser(null);
@@ -36,9 +38,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData) => {
+    if (!userData) return;
     setIsLoggedIn(true);
     setUser(userData);
-    setRole(userData.role);
+    setRole(userData.role || null);
   };
 
   const logout = async () => {
@@ -48,12 +51,13 @@ export const AuthProvider = ({ children }) => {
         {},
         { withCredentials: true }
       );
+    } catch (error) {
+      console.error("Logout failed", error);
+    } finally {
       setIsLoggedIn(false);
       setUser(null);
       setRole(null);
       navigate("/login");
-    } catch (error) {
-      console.error("Logout failed", error);
     }
   };
 

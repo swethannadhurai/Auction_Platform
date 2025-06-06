@@ -13,36 +13,42 @@ function Login() {
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 	const { login } = useAuth(); 
+    
+    const handleLogin = async (e) => {
+	e.preventDefault();
+	setLoading(true);
+	setError("");
 
-	const handleLogin = async (e) => {
-		e.preventDefault();
-		setLoading(true);
-		setError("");
+	try {
+		const loginUrl =
+			role === "seller"
+				? "https://auction-platform-ett9.onrender.com/api/auth/login-seller"
+				: "https://auction-platform-ett9.onrender.com/api/users/login";
 
-		try {
-			const loginUrl =
-				role === "seller"
-					? "https://auction-platform-ett9.onrender.com/api/auth/login-seller"
-					: "https://auction-platform-ett9.onrender.com/api/users/login";
+		const res = await axios.post(
+			loginUrl,
+			{ email, password },
+			{ withCredentials: true }
+		);
 
-			const res = await axios.post(
-				loginUrl,
-				{ email, password },
-				{ withCredentials: true }
-			);
+		 if (res.status === 200) {
+			const userData = res.data;
 
-			if (res.status === 200) {
-				const userData = res.data.user;
-				login(userData); 
-				navigate(userData.role === "seller" ? "/seller" : "/profile"); 
+			if (!userData || !userData.role) {
+				throw new Error("Invalid login response");
 			}
-		} catch (err) {
-			setError(err.response?.data?.message || "An error occurred");
-			console.error(err);
-		} finally {
-			setLoading(false);
-		}
-	};
+
+			login(userData);
+			navigate(userData.role === "seller" ? "/seller-dashboard" : "/profile");
+		 }
+	     } catch (err) {
+		console.error(err);
+		setError(err.response?.data?.message || err.message || "An error occurred");
+	    } finally {
+		setLoading(false);
+	   }
+    };
+
 
 	return (
 		<div

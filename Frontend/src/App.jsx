@@ -98,16 +98,21 @@ function AppRoutes() {
                          </ProtectedRoute>
                          }
                     />
-
-
-			
+					<Route
+                        path="/seller-dashboard"
+                        element={
+                        <ProtectedRoute allowedRoles={["seller"]}>
+                              <SellerDashboard />
+                       </ProtectedRoute>
+                       }
+                    />
+					<Route 
+					   path="create-product" 
+					   element={<CreateProduct />} />
+					<Route path="edit-product" element={<EditProduct />} />
+					<Route path="auctions" element={<ManageAuctions />} />
+					<Route path="inventory" element={<Inventory />} />
 					
-					<Route path="/seller-dashboard" element={<SellerDashboard />}>
-						<Route path="create-product" element={<CreateProduct />} />
-						<Route path="edit-product" element={<EditProduct />} />
-						<Route path="auctions" element={<ManageAuctions />} />
-						<Route path="inventory" element={<Inventory />} />
-					</Route>
 				</Routes>
 			</div>
 
