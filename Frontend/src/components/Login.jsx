@@ -38,7 +38,7 @@ function Login() {
 					throw new Error("Invalid login response");
 				}
 
-				login({ ...user, role: responseRole }); // Merge role into user object
+				login({ ...user, role: responseRole }); 
 				navigate(responseRole === "seller" ? "/seller" : "/profile");
 			}
 		} catch (err) {

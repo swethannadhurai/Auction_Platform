@@ -40,52 +40,50 @@ const registerUser = async (req, res) => {
 	}
 };
 
-
 const loginUser = async (req, res) => {
-	const { email, password } = req.body;
+  const { email, password } = req.body;
 
-	try {
-		if (!email || !password) {
-			return res.status(400).json({ message: "All fields are required" });
-		}
+  try {
+    if (!email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
-		const user = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-		if (!user) {
-			return res.status(400).json({ message: "User doesn't exist" });
-		}
+    if (!user) {
+      return res.status(400).json({ message: "User doesn't exist" });
+    }
 
-		const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
-		if (!isMatch) {
-			return res.status(400).json({ message: "Invalid password" });
-		}
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid password" });
+    }
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-			expiresIn: "1d",
-		});
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
-	
-		res.cookie("jwt", token, {
-			httpOnly: true,
-			secure: true, 
-			sameSite: "None", 
-			maxAge: 24 * 60 * 60 * 1000, 
-		});
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
-		
-		res.status(200).json({
-			id: user._id,
-			username: user.username,
-			email: user.email,
-		});
-	} catch (error) {
-		console.error("Login error:", error);
-		res.status(500).json({ message: "Internal server error" });
-	}
+    res.status(200).json({
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
+      role: "user"
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
-
-
 
 
 const getProfile = async (req, res) => {
