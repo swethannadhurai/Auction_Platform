@@ -84,11 +84,12 @@ const loginSeller = async (req, res) => {
       role: seller.role,
     };
 
-    res.json(sellerData);  
+    res.json({ user: sellerData, role: seller.role });  
   } catch (err) {
     res.status(500).json({ error: 'Login failed' });
   }
 };
+
 
 
 const getSellerProfile = async (req, res) => {

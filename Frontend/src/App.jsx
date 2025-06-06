@@ -35,7 +35,7 @@ function AppRoutes() {
 		} else {
 			logout();
 		}
-	}, []); // ✅ only run on initial render
+	}, []); 
 
 	console.log("Logged-in user:", user);
 	console.log("User role:", user?.role);
@@ -116,7 +116,7 @@ function AppRoutes() {
 				</Routes>
 			</div>
 
-			{/* Debugging UI */}
+			
 			{isLoggedIn && user && (
 				<div className="fixed bottom-0 right-0 bg-gray-800 text-white p-2 text-sm z-50">
 					Logged in as: {user.role}

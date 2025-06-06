@@ -13,42 +13,41 @@ function Login() {
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 	const { login } = useAuth(); 
-    
-    const handleLogin = async (e) => {
-	e.preventDefault();
-	setLoading(true);
-	setError("");
 
-	try {
-		const loginUrl =
-			role === "seller"
-				? "https://auction-platform-ett9.onrender.com/api/auth/login-seller"
-				: "https://auction-platform-ett9.onrender.com/api/users/login";
+	const handleLogin = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		setError("");
 
-		const res = await axios.post(
-			loginUrl,
-			{ email, password },
-			{ withCredentials: true }
-		);
+		try {
+			const loginUrl =
+				role === "seller"
+					? "https://auction-platform-ett9.onrender.com/api/auth/login-seller"
+					: "https://auction-platform-ett9.onrender.com/api/users/login";
 
-		 if (res.status === 200) {
-			const userData = res.data;
+			const res = await axios.post(
+				loginUrl,
+				{ email, password },
+				{ withCredentials: true }
+			);
 
-			if (!userData || !userData.role) {
-				throw new Error("Invalid login response");
+			if (res.status === 200) {
+				const { user, role: responseRole } = res.data;
+
+				if (!user || !responseRole) {
+					throw new Error("Invalid login response");
+				}
+
+				login({ ...user, role: responseRole }); // Merge role into user object
+				navigate(responseRole === "seller" ? "/seller" : "/profile");
 			}
-
-			login(userData);
-			navigate(userData.role === "seller" ? "/seller-dashboard" : "/profile");
-		 }
-	     } catch (err) {
-		console.error(err);
-		setError(err.response?.data?.message || err.message || "An error occurred");
-	    } finally {
-		setLoading(false);
-	   }
-    };
-
+		} catch (err) {
+			console.error(err);
+			setError(err.response?.data?.message || err.message || "An error occurred");
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div
@@ -63,7 +62,6 @@ function Login() {
 					Login
 				</h2>
 				<form onSubmit={handleLogin} className="space-y-4">
-					
 					<div className="mb-4">
 						<label className="text-white mr-4">Login as:</label>
 						<select
@@ -76,7 +74,6 @@ function Login() {
 						</select>
 					</div>
 
-					
 					<div className="flex items-center border rounded-md border-gray-600 bg-gray-700">
 						<FiMail className="w-6 h-6 text-gray-400 ml-3" />
 						<input
@@ -89,7 +86,6 @@ function Login() {
 						/>
 					</div>
 
-					
 					<div className="flex items-center border rounded-md border-gray-600 bg-gray-700">
 						<FiLock className="w-6 h-6 text-gray-400 ml-3" />
 						<input

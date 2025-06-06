@@ -3,13 +3,29 @@ const router = express.Router();
 const sellerController = require('../controllers/sellerController');
 const { authMiddleware, sellerOnly } = require('../middleware/authMiddleware');
 
-// ✅ Add this new route for seller profile
-router.get('/profile', authMiddleware, sellerController.getSellerProfile);
+// ----------- Seller Auth Routes -----------
 
-// Seller product management
+
+router.post('/register', sellerController.registerSeller);
+
+router.post('/login', sellerController.loginSeller);
+
+router.post('/logout', authMiddleware, sellerController.logoutSeller);
+
+router.get('/profile', authMiddleware, sellerOnly, sellerController.getSellerProfile);
+
+// ----------- Seller Product Routes -----------
+
+
 router.post('/products', authMiddleware, sellerOnly, sellerController.createProduct);
+
 router.get('/products', authMiddleware, sellerOnly, sellerController.getProducts);
+
+
 router.put('/products/:id', authMiddleware, sellerOnly, sellerController.updateProduct);
+
+
 router.delete('/products/:id', authMiddleware, sellerOnly, sellerController.deleteProduct);
 
 module.exports = router;
+
