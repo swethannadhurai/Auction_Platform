@@ -6,9 +6,10 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 function Signup() {
   const [role, setRole] = useState("user"); // user or seller
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -24,11 +25,14 @@ function Signup() {
           ? "https://auction-platform-ett9.onrender.com/api/seller/register"
           : "https://auction-platform-ett9.onrender.com/api/users/register";
 
-      const res = await axios.post(
-        endpoint,
-        { name, email, password },
-        { withCredentials: true }
-      );
+      const payload =
+        role === "seller"
+          ? { name: username, email, password }
+          : { username, email, password, confirmPassword };
+
+      const res = await axios.post(endpoint, payload, {
+        withCredentials: true,
+      });
 
       if (res.status === 201) {
         navigate("/login");
@@ -65,9 +69,9 @@ function Signup() {
           <FiUser className="w-5 h-5 ml-3 text-gray-300" />
           <input
             type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full px-4 py-2 bg-gray-600 text-white focus:outline-none"
             required
           />
@@ -96,6 +100,20 @@ function Signup() {
             required
           />
         </div>
+
+        {role === "user" && (
+          <div className="flex items-center border rounded-md border-gray-600 bg-gray-600">
+            <FiLock className="w-5 h-5 ml-3 text-gray-300" />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full px-4 py-2 bg-gray-600 text-white focus:outline-none"
+              required
+            />
+          </div>
+        )}
 
         <button
           type="submit"

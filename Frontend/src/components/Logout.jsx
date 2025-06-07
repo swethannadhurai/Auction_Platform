@@ -14,7 +14,7 @@ function Logout() {
 
 				const logoutUrl =
 					role === "seller"
-						? "https://auction-platform-ett9.onrender.com/api/sellers/logout"
+						? "https://auction-platform-ett9.onrender.com/api/seller/logout"
 						: "https://auction-platform-ett9.onrender.com/api/users/logout";
 
 				await axios.get(logoutUrl, {

@@ -49,20 +49,32 @@ const deleteProduct = async (req, res) => {
 
 
 const registerSeller = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, confirmPassword } = req.body;
+
+  if (!name || !email || !password || !confirmPassword) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: 'Passwords do not match' });
+  }
+
   try {
     const existing = await Seller.findOne({ email });
-    if (existing) return res.status(400).json({ error: 'Seller already exists' });
+    if (existing) {
+      return res.status(400).json({ message: 'Seller already exists' });
+    }
 
     const hashed = await bcrypt.hash(password, 10);
     const seller = await Seller.create({ name, email, password: hashed, role: 'seller' });
 
-    generateToken(res, seller); 
+    generateToken(res, seller);
     res.status(201).json({ message: 'Seller registered' });
   } catch (err) {
-    res.status(500).json({ error: 'Registration failed' });
+    res.status(500).json({ message: 'Registration failed' });
   }
 };
+
 
 
 const loginSeller = async (req, res) => {
@@ -106,7 +118,7 @@ const getSellerProfile = async (req, res) => {
 
 const logoutSeller = (req, res) => {
   
-      	try {
+  try {
 		res.clearCookie("jwt", {
 			httpOnly: true,
 			secure: true,

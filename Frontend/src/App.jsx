@@ -98,20 +98,51 @@ function AppRoutes() {
                          </ProtectedRoute>
                          }
                     />
-					<Route
-                        path="/seller-dashboard"
-                        element={
+				    <Route 
+                         path="/seller-dashboard"
+                         element={
                         <ProtectedRoute allowedRoles={["seller"]}>
-                              <SellerDashboard />
-                       </ProtectedRoute>
+                            <SellerDashboard />
+                      </ProtectedRoute>
                        }
                     />
-					<Route 
-					   path="create-product" 
-					   element={<CreateProduct />} />
-					<Route path="edit-product" element={<EditProduct />} />
-					<Route path="auctions" element={<ManageAuctions />} />
-					<Route path="inventory" element={<Inventory />} />
+
+                     <Route 
+                       path="/seller/create-product"
+                          element={
+                       <ProtectedRoute allowedRoles={["seller"]}>
+                      <CreateProduct />
+                      </ProtectedRoute>
+                      }
+                   /> 
+
+                  <Route 
+                    path="/seller/edit-product"
+                    element={
+                      <ProtectedRoute allowedRoles={["seller"]}>
+                        <EditProduct />
+                      </ProtectedRoute>
+                    }
+                   />
+
+                   <Route 
+                    path="/seller/auctions"
+                     element={
+                    <ProtectedRoute allowedRoles={["seller"]}>
+                       <ManageAuctions />
+                   </ProtectedRoute>
+                    }
+                  />
+
+                     <Route 
+                        path="/seller/inventory"
+                        element={
+                       <ProtectedRoute allowedRoles={["seller"]}>
+                               <Inventory />
+                       </ProtectedRoute>
+                      }
+                    />
+
 					
 				</Routes>
 			</div>
