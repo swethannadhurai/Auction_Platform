@@ -105,8 +105,20 @@ const getSellerProfile = async (req, res) => {
 };
 
 const logoutSeller = (req, res) => {
-  res.clearCookie('jwt');
-  res.json({ message: 'Logged out' });
+  
+      	try {
+		res.clearCookie("jwt", {
+			httpOnly: true,
+			secure: true,
+			sameSite: "None",
+			expires: new Date(0),
+		});
+		res.status(200).json({ message: "Logged out successfully" });
+	} catch (error) {
+		console.error("Logout error:", error);
+		res.status(500).json({ message: "Internal server error" });
+	}
+
 };
 
 module.exports = {
