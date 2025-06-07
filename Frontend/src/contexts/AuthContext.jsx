@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
           { withCredentials: true }
         );
 
-        const userData = res.data.user || res.data;
+        const userData = res.data;
         setUser(userData);
         setRole(userData.role || null);
         setIsLoggedIn(true);
