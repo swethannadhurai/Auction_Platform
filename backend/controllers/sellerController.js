@@ -79,6 +79,11 @@ const registerSeller = async (req, res) => {
 
 const loginSeller = async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required' });
+  }
+
   try {
     const seller = await Seller.findOne({ email });
     if (!seller) return res.status(400).json({ error: 'Invalid credentials' });
@@ -88,7 +93,6 @@ const loginSeller = async (req, res) => {
 
     generateToken(res, seller);
 
-    
     const sellerData = {
       _id: seller._id,
       name: seller.name,
@@ -98,9 +102,11 @@ const loginSeller = async (req, res) => {
 
     res.json({ user: sellerData, role: seller.role });  
   } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ error: 'Login failed' });
   }
 };
+
 
 
 

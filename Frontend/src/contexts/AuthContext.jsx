@@ -21,11 +21,12 @@ export const AuthProvider = ({ children }) => {
           { withCredentials: true }
         );
 
-        const userData = res.data.user || res.data; // safe fallback
+        const userData = res.data.user || res.data;
         setUser(userData);
         setRole(userData.role || null);
         setIsLoggedIn(true);
       } catch (error) {
+        
         setUser(null);
         setRole(null);
         setIsLoggedIn(false);
@@ -46,11 +47,12 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post(
-        `https://auction-platform-ett9.onrender.com/api/auth/logout`,
-        {},
-        { withCredentials: true }
-      );
+      const logoutUrl =
+        role === "seller"
+          ? "https://auction-platform-ett9.onrender.com/api/seller/logout"
+          : "https://auction-platform-ett9.onrender.com/api/users/logout";
+
+      await axios.post(logoutUrl, {}, { withCredentials: true });
     } catch (error) {
       console.error("Logout failed", error);
     } finally {
@@ -69,3 +71,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
