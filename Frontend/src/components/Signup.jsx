@@ -5,7 +5,7 @@ import { FiMail, FiLock, FiUser } from "react-icons/fi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 function Signup() {
-  const [role, setRole] = useState("user"); // user or seller
+  const [role, setRole] = useState("user");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,6 +18,12 @@ function Signup() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
 
     try {
       const endpoint =
@@ -101,19 +107,17 @@ function Signup() {
           />
         </div>
 
-        {role === "user" && (
-          <div className="flex items-center border rounded-md border-gray-600 bg-gray-600">
-            <FiLock className="w-5 h-5 ml-3 text-gray-300" />
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-600 text-white focus:outline-none"
-              required
-            />
-          </div>
-        )}
+        <div className="flex items-center border rounded-md border-gray-600 bg-gray-600">
+          <FiLock className="w-5 h-5 ml-3 text-gray-300" />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full px-4 py-2 bg-gray-600 text-white focus:outline-none"
+            required
+          />
+        </div>
 
         <button
           type="submit"
@@ -134,7 +138,9 @@ function Signup() {
           </Link>
         </p>
 
-        {error && <div className="text-red-300 text-sm text-center">{error}</div>}
+        {error && (
+          <div className="text-red-300 text-sm text-center">{error}</div>
+        )}
       </form>
     </div>
   );
