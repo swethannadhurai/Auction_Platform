@@ -10,13 +10,13 @@ const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Try finding user in both collections
-    let user = await User.findById(decoded.id).select("-password");
-    if (!user) {
-      user = await Seller.findById(decoded.id).select("-password");
-    }
+    let user = await User.findById(decoded._id).select("-password");
+     if (!user) {
+     user = await Seller.findById(decoded._id).select("-password");
+   }
+
 
     if (!user) {
       return res.status(401).json({ message: "User not found" });
