@@ -1,18 +1,27 @@
-import { Outlet } from "react-router-dom";
-import SellerSidebar from "../../components/SellerSidebar";
+// inside SellerDashboard.jsx
+import React from "react";
+import { Outlet, Link } from "react-router-dom";
 
-const SellerDashboard = () => {
+function SellerDashboard() {
   return (
-    <div className="flex min-h-screen">
-      <SellerSidebar />
-      <main className="flex-1 p-4">
-        <Outlet />
-      </main>
+    <div>
+      <h1>Seller Dashboard</h1>
+      <nav>
+        <Link to="inventory">Inventory</Link> |{" "}
+        <Link to="create-product">Create Product</Link> |{" "}
+        <Link to="edit-product">Edit Product</Link> |{" "}
+        <Link to="auctions">Manage Auctions</Link>
+      </nav>
+
+      {/* Nested routes will render here */}
+      <Outlet />
     </div>
   );
-};
+}
 
 export default SellerDashboard;
+
+
 
 
 

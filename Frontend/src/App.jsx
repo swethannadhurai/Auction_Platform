@@ -86,56 +86,22 @@ function AppRoutes() {
 
         
           <Route
-            path="/seller-dashboard"
-            element={
-              <ProtectedRoute allowedRoles={["seller"]}>
-                <SellerDashboard />
-              </ProtectedRoute>
-            }
+               path="/seller-dashboard"
+                element={
+                    <ProtectedRoute allowedRoles={["seller"]}>
+                      <SellerDashboard />
+                    </ProtectedRoute>
+               }
           >
-            <Route
-              index
-              element={
-                <ProtectedRoute allowedRoles={["seller"]}>
-                  <Inventory />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="create-product"
-              element={
-                <ProtectedRoute allowedRoles={["seller"]}>
-                  <CreateProduct />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="edit-product"
-              element={
-                <ProtectedRoute allowedRoles={["seller"]}>
-                  <EditProduct />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="auctions"
-              element={
-                <ProtectedRoute allowedRoles={["seller"]}>
-                  <ManageAuctions />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="inventory"
-              element={
-                <ProtectedRoute allowedRoles={["seller"]}>
-                  <Inventory />
-                </ProtectedRoute>
-              }
-            />
-          </Route>
-        </Routes>
-      </div>
+          <Route index element={<Inventory />} />
+          <Route path="create-product" element={<CreateProduct />} />
+          <Route path="edit-product" element={<EditProduct />} />
+          <Route path="auctions" element={<ManageAuctions />} />
+          <Route path="inventory" element={<Inventory />} />
+      </Route>
+
+    </Routes>
+  </div>
 
       
       {isLoggedIn && user && (
