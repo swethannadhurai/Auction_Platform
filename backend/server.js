@@ -41,7 +41,6 @@ app.use('/api/seller', require('./routes/sellerRoutes'));
 app.get("/api/auth/me", authMiddleware, async (req, res) => {
   try {
     let user = await User.findById(req.user.id).select("-password");
-
     if (!user) {
       user = await Seller.findById(req.user.id).select("-password");
     }
@@ -50,12 +49,13 @@ app.get("/api/auth/me", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json(user);
+    res.json(user); 
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 
 
