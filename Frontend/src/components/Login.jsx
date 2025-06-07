@@ -22,7 +22,7 @@ function Login() {
 		try {
 			const loginUrl =
 				role === "seller"
-					? "https://auction-platform-ett9.onrender.com/api/sellers/login"
+					? "https://auction-platform-ett9.onrender.com/api/seller/login"
 					: "https://auction-platform-ett9.onrender.com/api/users/login";
 
 			const res = await axios.post(

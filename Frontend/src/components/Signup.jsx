@@ -21,7 +21,7 @@ function Signup() {
     try {
       const endpoint =
         role === "seller"
-          ? "https://auction-platform-ett9.onrender.com/api/auth/register-seller"
+          ? "https://auction-platform-ett9.onrender.com/api/seller/register"
           : "https://auction-platform-ett9.onrender.com/api/users/register";
 
       const res = await axios.post(
