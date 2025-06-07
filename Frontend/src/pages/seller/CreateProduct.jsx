@@ -1,48 +1,53 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import axios from "axios";
 
-function CreateProduct() {
-  const [form, setForm] = useState({
-    name: '',
-    price: '',
-    quantity: '',
-    category: '',
+const CreateProduct = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    image: null,
   });
 
-  const [message, setMessage] = useState('');
-
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, files } = e.target;
+    if (name === "image") {
+      setFormData({ ...formData, image: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      await axios.post(
-        `https://auction-platform-ett9.onrender.com/api/seller/products`,
-        form,
+      const data = new FormData();
+      Object.entries(formData).forEach(([key, value]) => data.append(key, value));
+
+      const response = await axios.post(
+        "/api/seller/products",
+        data,
         { withCredentials: true }
       );
-      setMessage('Product created successfully!');
-      setForm({ name: '', price: '', quantity: '', category: '' });
-    } catch (err) {
-      setMessage(err.response?.data?.error || 'Error creating product.');
+      alert("Product created!");
+    } catch (error) {
+      console.error("Create failed:", error.response?.data || error.message);
     }
   };
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">Create Product</h2>
-      {message && <p className="mb-4 text-green-600">{message}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
-        <input name="name" value={form.name} onChange={handleChange} placeholder="Product Name" className="w-full p-2 border" required />
-        <input name="price" value={form.price} onChange={handleChange} placeholder="Price" type="number" className="w-full p-2 border" required />
-        <input name="quantity" value={form.quantity} onChange={handleChange} placeholder="Quantity" type="number" className="w-full p-2 border" required />
-        <input name="category" value={form.category} onChange={handleChange} placeholder="Category" className="w-full p-2 border" required />
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Create</button>
+      <h2 className="text-2xl font-bold mb-4">Create New Product</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input name="name" type="text" placeholder="Name" onChange={handleChange} className="w-full p-2" required />
+        <textarea name="description" placeholder="Description" onChange={handleChange} className="w-full p-2" required />
+        <input name="price" type="number" placeholder="Price" onChange={handleChange} className="w-full p-2" required />
+        <input name="image" type="file" accept="image/*" onChange={handleChange} />
+        <button type="submit" className="bg-blue-600 px-4 py-2 text-white rounded">Create</button>
       </form>
     </div>
   );
-}
+};
 
 export default CreateProduct;

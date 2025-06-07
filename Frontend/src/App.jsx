@@ -35,10 +35,14 @@ function AppRoutes() {
       <NavBar />
       <div className="container mx-auto">
         <Routes>
+      
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/auctions" element={<AuctionList />} />
 
+          
           <Route
             path="/profile"
             element={
@@ -47,10 +51,6 @@ function AppRoutes() {
               </ProtectedRoute>
             }
           />
-
-          <Route path="/logout" element={<Logout />} />
-          <Route path="/auctions" element={<AuctionList />} />
-
           <Route
             path="/auction/:id"
             element={
@@ -59,7 +59,6 @@ function AppRoutes() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/auction/create"
             element={
@@ -68,7 +67,6 @@ function AppRoutes() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/auction/edit/:id"
             element={
@@ -77,7 +75,6 @@ function AppRoutes() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/auction/bid/:id"
             element={
@@ -87,15 +84,7 @@ function AppRoutes() {
             }
           />
 
-          <Route
-            path="/seller/inventory"
-            element={
-              <ProtectedRoute allowedRoles={["seller"]}>
-                <Inventory />
-              </ProtectedRoute>
-            }
-          />
-
+        
           <Route
             path="/seller-dashboard"
             element={
@@ -103,37 +92,52 @@ function AppRoutes() {
                 <SellerDashboard />
               </ProtectedRoute>
             }
-          />
-
-          <Route
-            path="/seller/create-product"
-            element={
-              <ProtectedRoute allowedRoles={["seller"]}>
-                <CreateProduct />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/seller/edit-product"
-            element={
-              <ProtectedRoute allowedRoles={["seller"]}>
-                <EditProduct />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/seller/auctions"
-            element={
-              <ProtectedRoute allowedRoles={["seller"]}>
-                <ManageAuctions />
-              </ProtectedRoute>
-            }
-          />
+          >
+            <Route
+              index
+              element={
+                <ProtectedRoute allowedRoles={["seller"]}>
+                  <Inventory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="create-product"
+              element={
+                <ProtectedRoute allowedRoles={["seller"]}>
+                  <CreateProduct />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="edit-product"
+              element={
+                <ProtectedRoute allowedRoles={["seller"]}>
+                  <EditProduct />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="auctions"
+              element={
+                <ProtectedRoute allowedRoles={["seller"]}>
+                  <ManageAuctions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="inventory"
+              element={
+                <ProtectedRoute allowedRoles={["seller"]}>
+                  <Inventory />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
         </Routes>
       </div>
 
+      
       {isLoggedIn && user && (
         <div className="fixed bottom-0 right-0 bg-gray-800 text-white p-2 text-sm z-50">
           Logged in as: {user.role}
@@ -144,16 +148,7 @@ function AppRoutes() {
 }
 
 function App() {
-  return (
-    <AppRoutes />
-  );
+  return <AppRoutes />;
 }
 
-
-export default App; 
-
-
-  
-
-
-
+export default App;
