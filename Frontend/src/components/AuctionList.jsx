@@ -76,7 +76,7 @@ function AuctionList() {
 						<img
 							src={
 								item.image
-									? `https://auction-platform-ett9.onrender.com/uploads/${item.image}`
+									? `https://auction-platform-ett9.onrender.com${item.image}`
 									: "/default-image.jpg"
 							}
 							alt={item.title}
