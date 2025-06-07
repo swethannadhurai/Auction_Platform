@@ -27,7 +27,7 @@ function Signup() {
 
       const payload =
         role === "seller"
-          ? { name: username, email, password }
+          ? { name: username, email, password, confirmPassword }
           : { username, email, password, confirmPassword };
 
       const res = await axios.post(endpoint, payload, {
