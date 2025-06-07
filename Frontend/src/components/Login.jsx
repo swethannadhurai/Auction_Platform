@@ -39,7 +39,7 @@ function Login() {
 				}
 
 				login({ ...user, role: responseRole }); 
-				navigate(responseRole === "seller" ? "/seller" : "/profile");
+				navigate(responseRole === "seller" ? "/seller-dashboard" : "/profile");
 			}
 		} catch (err) {
 			console.error(err);
