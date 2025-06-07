@@ -26,36 +26,20 @@ function AuctionList() {
 			const filteredItems = auctionItems.filter((item) => {
 				const title = item.title || "";
 				const description = item.description || "";
-				const startingBid = item.startingBid
-					? item.startingBid.toString()
-					: "";
-				const endDate = item.endDate
-					? new Date(item.endDate).toLocaleDateString()
-					: "";
+				const startingBid = item.startingBid ? item.startingBid.toString() : "";
+				const endDate = item.endDate ? new Date(item.endDate).toLocaleDateString() : "";
 
 				const searchTermString = searchTerm.toLowerCase();
 
-				const matchesTitle = title
-					.toLowerCase()
-					.includes(searchTermString);
-				const matchesDescription = description
-					.toLowerCase()
-					.includes(searchTermString);
-				const matchesStartingBid =
-					startingBid.includes(searchTermString);
-				const matchesEndDate = endDate.includes(searchTermString);
-
 				return (
-					matchesTitle ||
-					matchesDescription ||
-					matchesStartingBid ||
-					matchesEndDate
+					title.toLowerCase().includes(searchTermString) ||
+					description.toLowerCase().includes(searchTermString) ||
+					startingBid.includes(searchTermString) ||
+					endDate.includes(searchTermString)
 				);
 			});
 			setSearchResults(filteredItems);
-			setTotalPages(
-				Math.ceil(filteredItems.length / ITEMS_PER_PAGE) || 0
-			);
+			setTotalPages(Math.ceil(filteredItems.length / ITEMS_PER_PAGE) || 0);
 			setCurrentPage(1);
 		};
 		filterItems();
@@ -84,36 +68,39 @@ function AuctionList() {
 				/>
 			</div>
 			<ul className="space-y-4">
-             {paginatedItems.map((item) => (
-             <li
-                key={item._id}
-                className="border border-gray-700 rounded-lg p-4 bg-gray-800 shadow-md"
-              >
-              {item.image && (
-             <img
-               src={`https://auction-platform-ett9.onrender.com${item.image}`}
-               alt={item.title}
-               className="w-full max-h-72 object-contain rounded-md mb-4"              />
-               )}
-             <Link
-              to={`/auction/${item._id}`}
-                  className="text-indigo-400 hover:underline text-lg font-semibold"
-                >
-             {item.title}
-             </Link>
-              <p className="text-gray-300 mt-2">
-              <b>{item.description}</b>
-             </p>
-                 <p className="text-gray-400 mt-2">
-                <b>Starting Bid:</b> ${item.startingBid}
-             </p>
-             <p className="text-gray-400 mt-2">
-                <b>End Date: </b>
-                {new Date(item.endDate).toLocaleDateString()}
-             </p>
-            </li>
-           ))}
-          </ul>
+				{paginatedItems.map((item) => (
+					<li
+						key={item._id}
+						className="border border-gray-700 rounded-lg p-4 bg-gray-800 shadow-md"
+					>
+						<img
+							src={
+								item.image
+									? `https://auction-platform-ett9.onrender.com/uploads/${item.image}`
+									: "/default-image.jpg"
+							}
+							alt={item.title}
+							className="w-full max-h-72 object-contain rounded-md mb-4"
+						/>
+						<Link
+							to={`/auction/${item._id}`}
+							className="text-indigo-400 hover:underline text-lg font-semibold"
+						>
+							{item.title}
+						</Link>
+						<p className="text-gray-300 mt-2">
+							<b>{item.description}</b>
+						</p>
+						<p className="text-gray-400 mt-2">
+							<b>Starting Bid:</b> ${item.startingBid}
+						</p>
+						<p className="text-gray-400 mt-2">
+							<b>End Date: </b>
+							{new Date(item.endDate).toLocaleDateString()}
+						</p>
+					</li>
+				))}
+			</ul>
 
 			<div className="mt-6 flex justify-between items-center">
 				<button
@@ -126,7 +113,7 @@ function AuctionList() {
 					Previous
 				</button>
 				<span className="text-gray-400">
-					Page {currentPage} of {totalPages == 0 ? 1 : totalPages}
+					Page {currentPage} of {totalPages === 0 ? 1 : totalPages}
 				</span>
 				<button
 					onClick={() => handlePageChange(currentPage + 1)}
