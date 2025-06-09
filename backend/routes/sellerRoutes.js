@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const sellerController = require('../controllers/sellerController');
 const { authMiddleware, sellerOnly } = require('../middleware/authMiddleware');
+const upload = require('../middleware/multerConfig');
 
 // ----------- Seller Auth Routes -----------
 
@@ -17,7 +18,7 @@ router.get('/profile', authMiddleware, sellerOnly, sellerController.getSellerPro
 // ----------- Seller Product Routes -----------
 
 
-router.post('/products', authMiddleware, sellerOnly, sellerController.createProduct);
+router.post('/products', authMiddleware, sellerOnly, upload.single('image'), sellerController.createProduct);
 
 router.get('/products', authMiddleware, sellerOnly, sellerController.getProducts);
 

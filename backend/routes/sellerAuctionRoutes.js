@@ -4,7 +4,7 @@ const auctionController = require('../controllers/auctionController');
 const inventoryController = require('../controllers/inventoryController');
 const dashboardController = require('../controllers/dashboardController');
 const { authMiddleware, sellerOnly } = require('../middleware/authMiddleware');
-const upload = require('../middleware/upload');
+const upload = require('../middleware/multerConfig');
 
 // Auction management
 router.post('/auctions', authMiddleware, sellerOnly, upload.single('image'), auctionController.createAuctionItem);
