@@ -12,10 +12,9 @@ const authMiddleware = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    
-    let user = await User.findById(decoded.id).select("-password");
+    let user = await User.findById(decoded._id).select("-password");
     if (!user) {
-      user = await Seller.findById(decoded.id).select("-password");
+      user = await Seller.findById(decoded._id).select("-password");
     }
 
     if (!user) {
@@ -23,6 +22,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     req.user = user;
+    req.role = decoded.role;
     next();
   } catch (error) {
     console.error(error);

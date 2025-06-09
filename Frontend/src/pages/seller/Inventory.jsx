@@ -9,22 +9,25 @@ function Inventory() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(`https://auction-platform-ett9.onrender.com/api/seller/products`, {
+        const res = await axios.get("https://auction-platform-ett9.onrender.com/api/seller/products", {
           withCredentials: true,
         });
         setProducts(res.data);
       } catch (err) {
-        setError("Failed to fetch inventory");
+        console.error("Error fetching inventory:", err);
+        setError("Failed to fetch inventory. Please ensure you're logged in as a seller.");
       } finally {
         setLoading(false);
       }
     };
+
     fetchProducts();
   }, []);
 
   return (
-    <div>
+    <div className="p-4">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">📦 Inventory</h2>
+
       {loading ? (
         <p className="text-gray-600">Loading inventory...</p>
       ) : error ? (
@@ -38,16 +41,21 @@ function Inventory() {
               key={product._id}
               className="border border-gray-200 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition"
             >
-              {product.image && (
+              {product.image ? (
                 <img
                   src={`https://auction-platform-ett9.onrender.com${product.image}`}
                   alt={product.title}
                   className="w-full h-40 object-cover mb-3 rounded-md"
                 />
+              ) : (
+                <div className="w-full h-40 bg-gray-200 mb-3 rounded-md flex items-center justify-center text-gray-500">
+                  No Image
+                </div>
               )}
+
               <h3 className="text-lg font-semibold text-gray-900">{product.title}</h3>
-              <p className="text-sm text-gray-600 mb-2">₹{product.price}</p>
-              <p className="text-gray-700">{product.description}</p>
+              <p className="text-sm text-gray-600 mb-1">₹{product.price}</p>
+              <p className="text-gray-700 text-sm">{product.description}</p>
             </div>
           ))}
         </div>
