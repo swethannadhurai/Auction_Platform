@@ -157,6 +157,22 @@ const logoutSeller = (req, res) => {
 
 };
 
+const getProductById = async (req, res) => {
+  try {
+    const product = await Product.findOne({ _id: req.params.id, seller: req.user.id });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.json(product);
+  } catch (err) {
+    console.error("Get product by ID error:", err);
+    res.status(500).json({ error: "Failed to fetch product" });
+  }
+};
+
+
 module.exports = {
   registerSeller,
   loginSeller,
@@ -166,4 +182,6 @@ module.exports = {
   getProducts,
   updateProduct,
   deleteProduct,
+  getProductById,
+
 };

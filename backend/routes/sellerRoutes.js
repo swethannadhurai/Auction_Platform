@@ -23,6 +23,8 @@ router.post('/products', authMiddleware, sellerOnly, upload.single('image'), sel
 
 router.get('/products', authMiddleware, sellerOnly, sellerController.getProducts);
 
+router.get('/products/:id', authMiddleware, sellerOnly, sellerController.getProductById);
+
 
 router.put('/products/:id', authMiddleware, sellerOnly, sellerController.updateProduct);
 
