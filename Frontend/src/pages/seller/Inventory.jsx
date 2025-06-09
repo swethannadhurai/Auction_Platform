@@ -1,49 +1,56 @@
-// /pages/seller/Inventory.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-const Inventory = () => {
-  const [products, setProducts] = useState([]); // Initialize as empty array
+function Inventory() {
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchSellerProducts = async () => {
       try {
-        const res = await axios.get("/api/seller/products", { withCredentials: true });
-        // Set products or fallback to empty array
-        setProducts(Array.isArray(res.data) ? res.data : []);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setError("Failed to load products.");
-        setProducts([]);
+        const res = await axios.get("/api/seller/products", {
+          withCredentials: true,
+        });
+        setProducts(res.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchSellerProducts();
   }, []);
 
-  if (loading) return <div className="text-white p-4">Loading products...</div>;
-  if (error) return <div className="text-red-500 p-4">{error}</div>;
-  if (products.length === 0) return <div className="text-white p-4">No products found.</div>;
+  if (loading) {
+    return <div className="text-center text-gray-600">Loading inventory...</div>;
+  }
+
+  if (products.length === 0) {
+    return <div className="text-center text-gray-600">No products found in inventory.</div>;
+  }
 
   return (
-    <div className="p-4 text-white">
-      <h2 className="text-2xl mb-4">Your Inventory</h2>
-      <ul className="space-y-4">
+    <div>
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Inventory</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <li key={product._id} className="border p-4 rounded bg-gray-800">
-            <h3 className="font-semibold">{product.title}</h3>
-            <p>{product.description}</p>
-            {/* Add buttons or links for Edit/Delete as needed */}
-          </li>
+          <div key={product._id} className="bg-white rounded-xl shadow-md p-4">
+            {product.image && (
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-48 object-cover rounded-md mb-4"
+              />
+            )}
+            <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
+            <p className="text-gray-600 mb-2">{product.description}</p>
+            <p className="text-sm text-gray-500">Price: ₹{product.price}</p>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
-};
+}
 
 export default Inventory;
-

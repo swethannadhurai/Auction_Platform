@@ -1,57 +1,48 @@
 import { Link, Outlet } from "react-router-dom";
 
-export default function SellerDashboard() {
+function SellerDashboard() {
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-800">
-      <div className="bg-gray-800 text-white p-4 shadow-md">
-        <h1 className="text-2xl font-bold">Seller Dashboard</h1>
-      </div>
+    <div className="min-h-screen bg-gray-100 flex">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white shadow-lg p-6 space-y-6 border-r border-gray-200">
+        <h2 className="text-2xl font-bold text-gray-900">Seller Dashboard</h2>
+        <nav className="flex flex-col gap-4 mt-4">
+          <Link
+            to="create-product"
+            className="text-gray-800 font-medium hover:bg-blue-100 hover:text-blue-700 px-4 py-2 rounded-lg transition"
+          >
+            ➕ Create Product
+          </Link>
+          <Link
+            to="edit-product"
+            className="text-gray-800 font-medium hover:bg-blue-100 hover:text-blue-700 px-4 py-2 rounded-lg transition"
+          >
+            ✏️ Edit/Delete Product
+          </Link>
+          <Link
+            to="auctions"
+            className="text-gray-800 font-medium hover:bg-blue-100 hover:text-blue-700 px-4 py-2 rounded-lg transition"
+          >
+            📦 Manage Auctions
+          </Link>
+          <Link
+            to="inventory"
+            className="text-gray-800 font-medium hover:bg-blue-100 hover:text-blue-700 px-4 py-2 rounded-lg transition"
+          >
+            📋 View Inventory
+          </Link>
+        </nav>
+      </aside>
 
-      <div className="flex">
-        {/* Sidebar Navigation */}
-        <aside className="w-64 bg-white p-6 shadow-md">
-          <nav className="space-y-4">
-            <Link
-              to="inventory"
-              className="block px-4 py-2 rounded hover:bg-gray-200 transition"
-            >
-              Inventory
-            </Link>
-            <Link
-              to="create-product"
-              className="block px-4 py-2 rounded hover:bg-gray-200 transition"
-            >
-              Create Product
-            </Link>
-            <Link
-              to="edit-product"
-              className="block px-4 py-2 rounded hover:bg-gray-200 transition"
-            >
-              Edit Product
-            </Link>
-            <Link
-              to="auctions"
-              className="block px-4 py-2 rounded hover:bg-gray-200 transition"
-            >
-              Manage Auctions
-            </Link>
-          </nav>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 p-6">
+      {/* Main Content */}
+      <main className="flex-1 p-6 bg-gray-50 overflow-y-auto">
+        <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
           <Outlet />
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
 
-
-
-
-
-
-
-
+export default SellerDashboard;
 

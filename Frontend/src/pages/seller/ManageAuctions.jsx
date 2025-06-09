@@ -3,17 +3,38 @@ import axios from "axios";
 
 const ManageAuctions = () => {
   const [auctions, setAuctions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get("/api/seller/auctions", { withCredentials: true }).then((res) => {
-      setAuctions(res.data);
-    });
+    axios
+      .get("/api/seller/auctions", {
+        withCredentials: true,
+        headers: {
+          "Cache-Control": "no-cache", // 👈 force fresh fetch, avoid 304
+        },
+      })
+      .then((res) => {
+        setAuctions(res.data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch auctions:", err);
+        setError("Failed to load auctions.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
-    <div>
+    <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Manage Auctions</h2>
-      {auctions.length === 0 ? (
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : auctions.length === 0 ? (
         <p>No auctions found.</p>
       ) : (
         <ul className="space-y-4">
@@ -31,3 +52,4 @@ const ManageAuctions = () => {
 };
 
 export default ManageAuctions;
+
