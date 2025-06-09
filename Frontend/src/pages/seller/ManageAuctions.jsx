@@ -11,15 +11,19 @@ const ManageAuctions = () => {
       .get("/api/seller/auctions", {
         withCredentials: true,
         headers: {
-          "Cache-Control": "no-cache", // 👈 force fresh fetch, avoid 304
+          "Cache-Control": "no-cache",
         },
       })
       .then((res) => {
-        setAuctions(res.data);
+        if (Array.isArray(res.data)) {
+          setAuctions(res.data);
+        } else {
+          throw new Error("Invalid response format");
+        }
       })
       .catch((err) => {
-        console.error("Failed to fetch auctions:", err);
-        setError("Failed to load auctions.");
+        console.error(err);
+        setError("Unauthorized or failed to fetch auctions");
       })
       .finally(() => {
         setLoading(false);
@@ -52,4 +56,5 @@ const ManageAuctions = () => {
 };
 
 export default ManageAuctions;
+
 
