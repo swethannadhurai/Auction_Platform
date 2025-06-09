@@ -13,11 +13,13 @@ import Home from "./components/Home";
 import CreateAuctionItem from "./components/CreateAuctionItem";
 import EditAuctionItem from "./components/EditAuctionItem";
 
+// Seller pages
 import SellerDashboard from "./pages/seller/SellerDashboard";
 import CreateProduct from "./pages/seller/CreateProduct";
 import EditProduct from "./pages/seller/EditProduct";
 import ManageAuctions from "./pages/seller/ManageAuctions";
 import Inventory from "./pages/seller/Inventory";
+import Dashboard from "./pages/seller/Dashboard"; // Assuming you have a Dashboard page
 
 function AppRoutes() {
   const { user, isLoggedIn, loading } = useAuth();
@@ -35,14 +37,14 @@ function AppRoutes() {
       <NavBar />
       <div className="container mx-auto">
         <Routes>
-      
+          {/* Public routes */}
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/auctions" element={<AuctionList />} />
 
-          
+          {/* Protected user routes */}
           <Route
             path="/profile"
             element={
@@ -84,34 +86,25 @@ function AppRoutes() {
             }
           />
 
-        
+          {/* Protected seller dashboard with nested routes */}
           <Route
-               path="/seller-dashboard"
-                element={
-                    <ProtectedRoute allowedRoles={["seller"]}>
-                      <SellerDashboard />
-                    </ProtectedRoute>
-               }
+            path="/seller-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["seller"]}>
+                <SellerDashboard />
+              </ProtectedRoute>
+            }
           >
+            <Route index element={<Inventory />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="create-product" element={<CreateProduct />} />
+            <Route path="edit-product/:id" element={<EditProduct />} />
+            <Route path="auctions" element={<ManageAuctions />} />
+            <Route path="inventory" element={<Inventory />} />
+          </Route>
+        </Routes>
+      </div>
 
-          <Route
-                index
-                  element={
-                  <ProtectedRoute allowedRoles={["seller"]}>
-                       <Inventory />
-                 </ProtectedRoute>
-                 }
-          />
-          <Route path="create-product" element={<CreateProduct />} />
-          <Route path="edit-product" element={<EditProduct />} />
-          <Route path="auctions" element={<ManageAuctions />} />
-          <Route path="inventory" element={<Inventory />} />
-      </Route>
-
-    </Routes>
-  </div>
-
-      
       {isLoggedIn && user && (
         <div className="fixed bottom-0 right-0 bg-gray-800 text-white p-2 text-sm z-50">
           Logged in as: {user.role}

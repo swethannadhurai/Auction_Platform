@@ -4,15 +4,33 @@ const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken'); 
 
 
+
 const createProduct = async (req, res) => {
-  const { name, price, quantity, category } = req.body;
   try {
-    const product = await Product.create({ name, price, quantity, category, seller: req.user.id });
+    const { name, price, quantity, category } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'Product image is required' });
+    }
+
+    const imagePath = `/uploads/${req.file.filename}`;
+
+    const product = await Product.create({
+      name,
+      price,
+      quantity,
+      category,
+      image: imagePath,
+      seller: req.user._id,
+    });
+
     res.status(201).json(product);
   } catch (err) {
+    console.error('Create product error:', err);
     res.status(500).json({ error: 'Failed to create product' });
   }
 };
+
 
 const getProducts = async (req, res) => {
   try {
