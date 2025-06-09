@@ -14,7 +14,7 @@ function SellerDashboard() {
             ➕ Create Product
           </Link>
           <Link
-            to="edit-product"
+            to="inventory"
             className="text-gray-800 font-medium hover:bg-blue-100 hover:text-blue-700 px-4 py-2 rounded-lg transition"
           >
             ✏️ Edit/Delete Product

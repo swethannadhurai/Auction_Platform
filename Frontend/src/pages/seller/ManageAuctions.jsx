@@ -12,7 +12,7 @@ function ManageAuctions() {
         const res = await axios.get(`https://auction-platform-ett9.onrender.com/api/seller/auctions`, {
           withCredentials: true,
         });
-        setAuctions(res.data);
+        setAuctions(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         setError("Failed to fetch auctions");
       } finally {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Inventory() {
   const [products, setProducts] = useState([]);
@@ -22,6 +23,20 @@ function Inventory() {
     };
     fetchInventory();
   }, []);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+
+    try {
+      await axios.delete(
+        `https://auction-platform-ett9.onrender.com/api/seller/products/${id}`,
+        { withCredentials: true }
+      );
+      setProducts(products.filter((product) => product._id !== id));
+    } catch (err) {
+      alert("Failed to delete product.");
+    }
+  };
 
   return (
     <div className="p-6">
@@ -55,9 +70,22 @@ function Inventory() {
               <p className="text-sm text-gray-600">
                 <span className="font-medium">Quantity:</span> {product.quantity ?? "N/A"}
               </p>
-              <p className="text-sm text-gray-700 font-semibold mt-2">
-                ₹{product.price}
-              </p>
+              <p className="text-sm text-gray-700 font-semibold mt-2">₹{product.price}</p>
+
+              <div className="mt-4 flex gap-3">
+                <Link
+                  to={`/seller-dashboard/edit-product/${product._id}`}
+                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Edit
+                </Link>
+                <button
+                  onClick={() => handleDelete(product._id)}
+                  className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -67,6 +95,3 @@ function Inventory() {
 }
 
 export default Inventory;
-
-
-

@@ -3,10 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const EditProduct = () => {
-  const { productId } = useParams(); // Get dynamic ID from URL
+  const { id } = useParams();
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    title: "",
+    name: "",
     description: "",
     price: "",
     image: "",
@@ -18,10 +19,15 @@ const EditProduct = () => {
     const fetchProduct = async () => {
       try {
         const res = await axios.get(
-          `https://auction-platform-ett9.onrender.com/api/seller/products/${productId}`,
+          `https://auction-platform-ett9.onrender.com/api/seller/products/${id}`,
           { withCredentials: true }
         );
-        setFormData(res.data);
+        setFormData({
+          name: res.data.name || "",
+          description: res.data.description || "",
+          price: res.data.price || "",
+          image: res.data.image || "",
+        });
       } catch (err) {
         setError("Failed to load product data.");
       } finally {
@@ -29,7 +35,7 @@ const EditProduct = () => {
       }
     };
     fetchProduct();
-  }, [productId]);
+  }, [id]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,7 +45,7 @@ const EditProduct = () => {
     e.preventDefault();
     try {
       await axios.put(
-        `https://auction-platform-ett9.onrender.com/api/seller/products/${productId}`,
+        `https://auction-platform-ett9.onrender.com/api/seller/products/${id}`,
         formData,
         { withCredentials: true }
       );
@@ -59,11 +65,12 @@ const EditProduct = () => {
       <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
-          name="title"
-          value={formData.title}
+          name="name"
+          value={formData.name}
           onChange={handleChange}
-          placeholder="Title"
+          placeholder="Name"
           className="w-full p-2 border rounded"
+          required
         />
         <textarea
           name="description"
@@ -71,6 +78,7 @@ const EditProduct = () => {
           onChange={handleChange}
           placeholder="Description"
           className="w-full p-2 border rounded"
+          required
         />
         <input
           name="price"
@@ -79,6 +87,9 @@ const EditProduct = () => {
           onChange={handleChange}
           placeholder="Price"
           className="w-full p-2 border rounded"
+          required
+          min="0"
+          step="0.01"
         />
         <input
           name="image"
@@ -99,4 +110,5 @@ const EditProduct = () => {
 };
 
 export default EditProduct;
+
 
