@@ -109,6 +109,8 @@ const loginSeller = async (req, res) => {
     const match = await bcrypt.compare(password, seller.password);
     if (!match) return res.status(400).json({ error: 'Invalid credentials' });
 
+    seller.role = "seller"; 
+
     generateToken(res, seller);
 
     const sellerData = {

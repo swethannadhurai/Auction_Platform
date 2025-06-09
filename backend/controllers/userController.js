@@ -60,9 +60,11 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid password" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+
+	const token = jwt.sign({ id: user._id, role: 'user' }, process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
 
     res.cookie("jwt", token, {
       httpOnly: true,
