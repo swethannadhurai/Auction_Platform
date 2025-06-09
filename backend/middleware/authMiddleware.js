@@ -12,23 +12,26 @@ const authMiddleware = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    let user = await User.findById(decoded._id).select("-password");
+    let user = await User.findById(decoded.id).select("-password");
     if (!user) {
-      user = await Seller.findById(decoded._id).select("-password");
+      user = await Seller.findById(decoded.id).select("-password");
     }
 
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
 
-    req.user = user;
-    req.role = decoded.role;
+    req.user = {
+      id: user._id,
+      role: user.role,
+    };
     next();
   } catch (error) {
     console.error(error);
     res.status(401).json({ message: "Token is not valid" });
   }
 };
+
 
 const sellerOnly = (req, res, next) => {
   if (req.user.role !== "seller") {
