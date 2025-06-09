@@ -35,6 +35,7 @@ app.use("/api/bids", require("./routes/bidRoutes"));
 
 
 app.use('/api/seller', require('./routes/sellerRoutes'));
+app.use('/api/seller', require('./routes/sellerAuctionRoutes')); 
 
 
 
