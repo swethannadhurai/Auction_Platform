@@ -93,7 +93,15 @@ function AppRoutes() {
                     </ProtectedRoute>
                }
           >
-          <Route index element={<Inventory />} />
+
+          <Route
+                index
+                  element={
+                  <ProtectedRoute allowedRoles={["seller"]}>
+                       <Inventory />
+                 </ProtectedRoute>
+                 }
+          />
           <Route path="create-product" element={<CreateProduct />} />
           <Route path="edit-product" element={<EditProduct />} />
           <Route path="auctions" element={<ManageAuctions />} />
