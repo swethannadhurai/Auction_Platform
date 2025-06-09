@@ -4,53 +4,57 @@ import axios from "axios";
 function Inventory() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchSellerProducts = async () => {
+    const fetchProducts = async () => {
       try {
-        const res = await axios.get("/api/seller/products", {
+        const res = await axios.get(`https://auction-platform-ett9.onrender.com/api/seller/products`, {
           withCredentials: true,
         });
         setProducts(res.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
+      } catch (err) {
+        setError("Failed to fetch inventory");
       } finally {
         setLoading(false);
       }
     };
-
-    fetchSellerProducts();
+    fetchProducts();
   }, []);
-
-  if (loading) {
-    return <div className="text-center text-gray-600">Loading inventory...</div>;
-  }
-
-  if (products.length === 0) {
-    return <div className="text-center text-gray-600">No products found in inventory.</div>;
-  }
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Inventory</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <div key={product._id} className="bg-white rounded-xl shadow-md p-4">
-            {product.image && (
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-48 object-cover rounded-md mb-4"
-              />
-            )}
-            <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
-            <p className="text-gray-600 mb-2">{product.description}</p>
-            <p className="text-sm text-gray-500">Price: ₹{product.price}</p>
-          </div>
-        ))}
-      </div>
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">📦 Inventory</h2>
+      {loading ? (
+        <p className="text-gray-600">Loading inventory...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : products.length === 0 ? (
+        <p className="text-gray-600">No products found in inventory.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {products.map((product) => (
+            <div
+              key={product._id}
+              className="border border-gray-200 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition"
+            >
+              {product.image && (
+                <img
+                  src={`https://auction-platform-ett9.onrender.com${product.image}`}
+                  alt={product.title}
+                  className="w-full h-40 object-cover mb-3 rounded-md"
+                />
+              )}
+              <h3 className="text-lg font-semibold text-gray-900">{product.title}</h3>
+              <p className="text-sm text-gray-600 mb-2">₹{product.price}</p>
+              <p className="text-gray-700">{product.description}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
 export default Inventory;
+

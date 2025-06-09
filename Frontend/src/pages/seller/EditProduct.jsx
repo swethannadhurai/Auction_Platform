@@ -1,4 +1,4 @@
-// Assumes product is preloaded from context or query param
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -7,7 +7,7 @@ const EditProduct = () => {
   const [formData, setFormData] = useState({ name: "", description: "", price: "" });
 
   useEffect(() => {
-    axios.get(`/api/seller/products/${productId}`, { withCredentials: true }).then((res) => {
+    axios.get(`https://auction-platform-ett9.onrender.com/api/seller/products/${productId}`, { withCredentials: true }).then((res) => {
       setFormData(res.data);
     });
   }, [productId]);
@@ -19,7 +19,7 @@ const EditProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/api/seller/products/${productId}`, formData, { withCredentials: true });
+      await axios.put(`https://auction-platform-ett9.onrender.com/api/seller/products/${productId}`, formData, { withCredentials: true });
       alert("Product updated!");
     } catch (error) {
       console.error("Update failed:", error.response?.data || error.message);

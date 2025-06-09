@@ -26,7 +26,7 @@ const CreateProduct = () => {
       Object.entries(formData).forEach(([key, value]) => data.append(key, value));
 
       const response = await axios.post(
-        "/api/seller/products",
+        `https://auction-platform-ett9.onrender.com/api/seller/products`,
         data,
         { withCredentials: true }
       );
