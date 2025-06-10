@@ -11,7 +11,7 @@ function Inventory() {
     const fetchInventory = async () => {
       try {
         const res = await axios.get(
-          "https://auction-platform-ett9.onrender.com/api/seller/inventory",
+          "https://auction-platform-ett9.onrender.com/api/seller/auctions/inventory",
           { withCredentials: true }
         );
         setProducts(res.data);

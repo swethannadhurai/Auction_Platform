@@ -15,11 +15,11 @@ router.put('/:id', authMiddleware, sellerOnly, upload.single('image'), auctionCo
 router.delete('/:id', authMiddleware, sellerOnly, auctionController.deleteAuctionItem);
 
 // Inventory management
-router.post('/inventory', authMiddleware, sellerOnly, upload.single('image'), inventoryController.createProduct);
-router.get('/inventory', authMiddleware, sellerOnly, inventoryController.getInventory);
-router.put('/inventory/:id', authMiddleware, sellerOnly, upload.single('image'), inventoryController.updateInventory);
-router.get('/inventory/:id', authMiddleware, sellerOnly, inventoryController.getProductById);
-router.delete('/inventory/:id', authMiddleware, sellerOnly, inventoryController.deleteProduct);
+router.post('/', authMiddleware, sellerOnly, upload.single('image'), inventoryController.createProduct);
+router.get('/', authMiddleware, sellerOnly, inventoryController.getInventory);
+router.put('/:id', authMiddleware, sellerOnly, upload.single('image'), inventoryController.updateInventory);
+router.get('/:id', authMiddleware, sellerOnly, inventoryController.getProductById);
+router.delete('/:id', authMiddleware, sellerOnly, inventoryController.deleteProduct);
 
 // Dashboard
 router.get('/dashboard', authMiddleware, sellerOnly, dashboardController.getDashboardStats);
