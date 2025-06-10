@@ -1,4 +1,3 @@
-// server/controllers/inventoryController.js
 const Product = require('../models/Product');
 const path = require('path');
 const fs = require('fs');
@@ -6,7 +5,7 @@ const fs = require('fs');
 // GET all products for a seller
 const getInventory = async (req, res) => {
   try {
-    const products = await Product.find({ seller: req.user.id });
+    const products = await Product.find({ seller: req.user._id });
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch inventory' });
@@ -16,7 +15,7 @@ const getInventory = async (req, res) => {
 // GET a single product by ID
 const getProductById = async (req, res) => {
   try {
-    const product = await Product.findOne({ _id: req.params.id, seller: req.user.id });
+    const product = await Product.findOne({ _id: req.params.id, seller: req.user._id });
     if (!product) return res.status(404).json({ error: 'Product not found' });
     res.json(product);
   } catch (error) {
@@ -39,7 +38,7 @@ const createProduct = async (req, res) => {
       description,
       price,
       image: imagePath,
-      seller: req.user.id,
+      seller: req.user._id, // ✅ Fixed here
     });
 
     await newProduct.save();
@@ -66,7 +65,7 @@ const updateInventory = async (req, res) => {
     }
 
     const updatedProduct = await Product.findOneAndUpdate(
-      { _id: req.params.id, seller: req.user.id },
+      { _id: req.params.id, seller: req.user._id }, // ✅ Fixed here
       updateData,
       { new: true }
     );
@@ -81,10 +80,9 @@ const updateInventory = async (req, res) => {
 // DELETE product
 const deleteProduct = async (req, res) => {
   try {
-    const product = await Product.findOneAndDelete({ _id: req.params.id, seller: req.user.id });
+    const product = await Product.findOneAndDelete({ _id: req.params.id, seller: req.user._id }); // ✅ Fixed here
     if (!product) return res.status(404).json({ error: 'Product not found' });
 
-    // Delete image from filesystem if it exists
     if (product.image) {
       const filePath = path.join(__dirname, '..', 'public', product.image);
       fs.unlink(filePath, (err) => {
@@ -105,3 +103,4 @@ module.exports = {
   updateInventory,
   deleteProduct,
 };
+
