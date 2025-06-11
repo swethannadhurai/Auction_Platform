@@ -20,7 +20,7 @@ function StartAuctionForm() {
     e.preventDefault();
     try {
       await axios.post(
-  `https://auction-platform-ett9.onrender.com/api/seller/inventory/${productId}/auction`,
+  `https://auction-platform-ett9.onrender.com/api/seller/inventory/${productId}/auctions`,
   {
     startTime: form.startTime,
     endTime: form.endTime,
