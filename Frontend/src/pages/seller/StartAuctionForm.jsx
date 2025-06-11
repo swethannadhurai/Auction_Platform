@@ -31,7 +31,7 @@ function StartAuctionForm() {
 
     
       alert("Auction listed successfully!");
-      navigate("/seller-dashboard/manage-auctions");
+      navigate("/seller-dashboard/auctions");
     } catch (err) {
       alert("Failed to create auction.");
     }
