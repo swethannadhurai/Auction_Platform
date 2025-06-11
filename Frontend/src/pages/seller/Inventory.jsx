@@ -85,6 +85,12 @@ function Inventory() {
                 >
                   Delete
                 </button>
+                <Link
+                    to={`/seller-dashboard/start-auction/${product._id}`}
+                    className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                >
+                  List for Auction
+                </Link>
               </div>
             </div>
           ))}

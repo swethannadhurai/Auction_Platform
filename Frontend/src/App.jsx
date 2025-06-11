@@ -101,6 +101,8 @@ function AppRoutes() {
             <Route path="edit-product/:id" element={<EditProduct />} />
             <Route path="auctions" element={<ManageAuctions />} />
             <Route path="inventory" element={<Inventory />} />
+            <Route path="/seller-dashboard/start-auction/:productId" element={<StartAuctionForm />} />
+
           </Route>
         </Routes>
       </div>

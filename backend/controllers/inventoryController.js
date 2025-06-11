@@ -2,7 +2,44 @@ const Product = require('../models/Product');
 const path = require('path');
 const fs = require('fs');
 
-// GET all products for a seller
+const Auction = require('../models/AuctionItem'); 
+
+const listProductForAuction = async (req, res) => {
+  try {
+    const { productId, startTime, endTime, startingBid } = req.body;
+
+    if (!productId || !startTime || !endTime || !startingBid) {
+      return res.status(400).json({ error: 'All auction fields are required' });
+    }
+
+    
+    const product = await Product.findOne({ _id: productId, seller: req.user._id });
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found or not yours' });
+    }
+
+    
+    const existingAuction = await Auction.findOne({ product: productId });
+    if (existingAuction) {
+      return res.status(400).json({ error: 'Auction already exists for this product' });
+    }
+
+    const newAuction = await Auction.create({
+      product: productId,
+      seller: req.user._id,
+      startTime,
+      endTime,
+      startingBid,
+      status: 'upcoming',
+    });
+
+    res.status(201).json(newAuction);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to create auction' });
+  }
+};
+
 const getInventory = async (req, res) => {
   try {
     const products = await Product.find({ seller: req.user._id });
@@ -12,7 +49,6 @@ const getInventory = async (req, res) => {
   }
 };
 
-// GET a single product by ID
 const getProductById = async (req, res) => {
   try {
     const product = await Product.findOne({ _id: req.params.id, seller: req.user._id });
@@ -23,7 +59,7 @@ const getProductById = async (req, res) => {
   }
 };
 
-// CREATE new product
+
 const createProduct = async (req, res) => {
   try {
     const { name, description, price } = req.body;
@@ -38,7 +74,7 @@ const createProduct = async (req, res) => {
       description,
       price,
       image: imagePath,
-      seller: req.user._id, // ✅ Fixed here
+      seller: req.user._id, 
     });
 
     await newProduct.save();
@@ -48,7 +84,7 @@ const createProduct = async (req, res) => {
   }
 };
 
-// UPDATE product
+
 const updateInventory = async (req, res) => {
   try {
     const { name, description, price, quantity } = req.body;
@@ -77,7 +113,7 @@ const updateInventory = async (req, res) => {
   }
 };
 
-// DELETE product
+
 const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findOneAndDelete({ _id: req.params.id, seller: req.user._id }); // ✅ Fixed here
@@ -97,6 +133,7 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = {
+  listProductForAuction,
   getInventory,
   getProductById,
   createProduct,
