@@ -100,7 +100,7 @@ function AppRoutes() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="create-product" element={<CreateProduct />} />
             <Route path="edit-product/:id" element={<EditProduct />} />
-            <Route path="auctions" element={<ManageAuctions />} />
+            <Route path="manage-auctions" element={<ManageAuctions />} />
             <Route path="inventory" element={<Inventory />} />
             <Route path="/seller-dashboard/start-auction/:productId" element={<StartAuctionForm />} />
             
