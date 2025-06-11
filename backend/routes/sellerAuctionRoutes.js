@@ -20,7 +20,7 @@ router.get('/inventory', authMiddleware, sellerOnly, inventoryController.getInve
 router.put('/inventory/:id', authMiddleware, sellerOnly, upload.single('image'), inventoryController.updateInventory);
 router.get('/inventory/:id', authMiddleware, sellerOnly, inventoryController.getProductById);
 router.delete('/inventory/:id', authMiddleware, sellerOnly, inventoryController.deleteProduct);
-router.post('/inventory/:productId/auction', authMiddleware, sellerOnly, inventoryController.listProductForAuction);
+router.post('/inventory/:productId/auctions', authMiddleware, sellerOnly, inventoryController.listProductForAuction);
 
 
 // Dashboard

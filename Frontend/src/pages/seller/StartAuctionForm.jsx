@@ -20,19 +20,19 @@ function StartAuctionForm() {
     e.preventDefault();
     try {
       await axios.post(
-  `https://auction-platform-ett9.onrender.com/api/seller/inventory/${productId}/auctions`,
-  {
-    startTime: form.startTime,
-    endTime: form.endTime,
-    startingBid: form.startingBid,
-  },
-  { withCredentials: true }
-);
+        `https://auction-platform-ett9.onrender.com/api/seller/inventory/${productId}/auctions`,
+        {
+          startingBid: form.startingBid,
+          startTime: form.startTime,
+          endTime: form.endTime,
+        },
+        { withCredentials: true }
+      );
 
-    
       alert("Auction listed successfully!");
       navigate("/seller-dashboard/manage-auctions");
     } catch (err) {
+      console.error(err.response?.data || err.message);
       alert("Failed to create auction.");
     }
   };
@@ -78,3 +78,4 @@ function StartAuctionForm() {
 }
 
 export default StartAuctionForm;
+

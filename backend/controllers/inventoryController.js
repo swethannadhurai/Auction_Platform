@@ -5,11 +5,15 @@ const AuctionItem = require("../models/AuctionItem");
 
 const listProductForAuction = async (req, res) => {
   try {
-    const productId = req.params.productId; // ✅ From URL
+    const productId = req.params.productId;
     const { startTime, endTime, startingBid } = req.body;
 
     if (!productId || !startTime || !endTime || !startingBid) {
       return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    if (new Date(startTime) >= new Date(endTime)) {
+      return res.status(400).json({ error: "End time must be after start time" });
     }
 
     const product = await Product.findOne({ _id: productId, seller: req.user._id });
@@ -29,6 +33,7 @@ const listProductForAuction = async (req, res) => {
       description: product.description,
       image: product.image,
       startingBid: Number(startingBid),
+      startDate: new Date(startTime),   
       endDate: new Date(endTime),
     });
 
@@ -38,10 +43,6 @@ const listProductForAuction = async (req, res) => {
     res.status(500).json({ error: "Failed to create auction" });
   }
 };
-
-
-
-
 
 
 const getInventory = async (req, res) => {
