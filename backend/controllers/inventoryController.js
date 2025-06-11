@@ -1,28 +1,40 @@
 const Product = require('../models/Product');
 const path = require('path');
 const fs = require('fs');
-
-const Auction = require('../models/AuctionItem'); 
+const AuctionItem = require("../models/AuctionItem");
 
 const listProductForAuction = async (req, res) => {
   try {
     const { productId, startTime, endTime, startingBid } = req.body;
 
     if (!productId || !startTime || !endTime || !startingBid) {
-      return res.status(400).json({ error: 'All auction fields are required' });
+      return res.status(400).json({ error: "Missing required fields" });
     }
 
     const product = await Product.findOne({ _id: productId, seller: req.user._id });
+
     if (!product) {
-      return res.status(404).json({ error: 'Product not found or not yours' });
+      return res.status(404).json({ error: "Product not found" });
     }
 
-    const existingAuction = await Auction.findOne({ product: productId });
+    const existingAuction = await AuctionItem.findOne({ product: productId });
     if (existingAuction) {
-      return res.status(400).json({ error: 'Auction already exists for this product' });
+      return res.status(400).json({ error: "Auction already exists for this product" });
     }
 
-    const newAuction = await Auction.create({
+    
+    console.log("Creating auction with:");
+    console.log({
+      product: productId,
+      seller: req.user._id,
+      title: product.name,
+      description: product.description,
+      image: product.image,
+      startingBid,
+      endDate: endTime
+    });
+
+    const auction = await AuctionItem.create({
       product: productId,
       seller: req.user._id,
       title: product.name,
@@ -30,18 +42,17 @@ const listProductForAuction = async (req, res) => {
       image: product.image,
       startingBid: Number(startingBid),
       endDate: new Date(endTime),
-      status: 'upcoming',
     });
 
-    res.status(201).json(newAuction);
+    res.status(201).json(auction);
   } catch (error) {
-    console.error("❌ Error creating auction:", {
-      message: error.message,
-      stack: error.stack,
-    });
-    res.status(500).json({ error: 'Failed to create auction' });
+    console.error("❌ Error creating auction:", error.message);
+    console.error(error.stack);
+    res.status(500).json({ error: "Failed to create auction" });
   }
 };
+
+
 
 
 
