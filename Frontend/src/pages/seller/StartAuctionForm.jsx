@@ -20,13 +20,16 @@ function StartAuctionForm() {
     e.preventDefault();
     try {
       await axios.post(
-        "https://auction-platform-ett9.onrender.com/api/seller/auctions",
-        {
-          productId,
-          ...form,
-        },
-        { withCredentials: true }
-      );
+  `https://auction-platform-ett9.onrender.com/api/seller/inventory/${productId}/auction`,
+  {
+    startTime: form.startTime,
+    endTime: form.endTime,
+    startingBid: form.startingBid,
+  },
+  { withCredentials: true }
+);
+
+    
       alert("Auction listed successfully!");
       navigate("/seller-dashboard/manage-auctions");
     } catch (err) {

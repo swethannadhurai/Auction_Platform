@@ -5,7 +5,10 @@ const AuctionItem = require("../models/AuctionItem");
 
 const listProductForAuction = async (req, res) => {
   try {
-    const { productId, startTime, endTime, startingBid } = req.body;
+  
+    const { startTime, endTime, startingBid } = req.body;
+    const productId = req.params.productId;
+
 
     if (!productId || !startTime || !endTime || !startingBid) {
       return res.status(400).json({ error: "Missing required fields" });

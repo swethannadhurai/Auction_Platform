@@ -103,7 +103,7 @@ function AppRoutes() {
             <Route path="auctions" element={<ManageAuctions />} />
             <Route path="inventory" element={<Inventory />} />
             <Route path="/seller-dashboard/start-auction/:productId" element={<StartAuctionForm />} />
-
+            
           </Route>
         </Routes>
       </div>
