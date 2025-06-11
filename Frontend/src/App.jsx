@@ -19,7 +19,8 @@ import CreateProduct from "./pages/seller/CreateProduct";
 import EditProduct from "./pages/seller/EditProduct";
 import ManageAuctions from "./pages/seller/ManageAuctions";
 import Inventory from "./pages/seller/Inventory";
-import Dashboard from "./pages/seller/Dashboard"; // Assuming you have a Dashboard page
+import Dashboard from "./pages/seller/Dashboard"; 
+import StartAuctionForm from "./pages/seller/StartAuctionForm";
 
 function AppRoutes() {
   const { user, isLoggedIn, loading } = useAuth();
