@@ -6,9 +6,10 @@ const generateToken = require('../utils/generateToken');
 const AuctionItem = require("../models/AuctionItem");
 
 
+
 const createProduct = async (req, res) => {
   try {
-    const { name, price, quantity, category } = req.body;
+    const { name, price, quantity, category, description } = req.body;
 
     if (!req.file) {
       return res.status(400).json({ error: 'Product image is required' });
@@ -21,6 +22,7 @@ const createProduct = async (req, res) => {
       price,
       quantity,
       category,
+      description,
       image: imagePath,
       seller: req.user._id,
     });
