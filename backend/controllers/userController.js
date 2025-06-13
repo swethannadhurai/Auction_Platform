@@ -97,7 +97,7 @@ const getProfile = async (req, res) => {
       id: user._id,
       username: user.username,
       email: user.email,
-      role: "user",
+      role: user.role,
     });
   } catch (error) {
     console.error("Profile fetch error:", error);
