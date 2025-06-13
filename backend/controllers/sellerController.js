@@ -3,6 +3,7 @@ const Product = require('../models/Product');
 const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/generateToken'); 
 
+const AuctionItem = require("../models/AuctionItem");
 
 
 const createProduct = async (req, res) => {
@@ -175,6 +176,43 @@ const getProductById = async (req, res) => {
 };
 
 
+const createAuctionForProduct = async (req, res) => {
+  const { productId } = req.params;
+  const { startingBid, startTime, endTime } = req.body;
+
+  try {
+    
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    
+    const newAuction = new AuctionItem({
+      title: product.name,
+      description: product.description,
+      startingBid: Number(startingBid),
+      startDate: new Date(startTime),
+      endDate: new Date(endTime),
+      product: product._id,
+      seller: req.user._id, 
+      status: "pending", 
+      image: product.image,
+      createdBy: req.user._id,
+    });
+
+    await newAuction.save();
+    res.status(201).json({ message: "Auction created", auction: newAuction });
+  } catch (error) {
+    console.error("Auction creation error:", error);
+    res.status(500).json({
+      message: "Auction creation failed",
+      error: error.message || error,
+    });
+  }
+};
+
+
 module.exports = {
   registerSeller,
   loginSeller,
@@ -185,5 +223,6 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getProductById,
+  createAuctionForProduct,
 
 };
