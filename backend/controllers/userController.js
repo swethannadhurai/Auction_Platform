@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const Seller = require("../models/Seller");
 const generateToken = require("../utils/generateToken");
 
 
@@ -85,9 +86,14 @@ const loginUser = async (req, res) => {
 };
 
 
+
 const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    let user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      user = await Seller.findById(req.user.id).select("-password");
+    }
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -97,13 +103,14 @@ const getProfile = async (req, res) => {
       id: user._id,
       username: user.username,
       email: user.email,
-      role: user.role,
+      role: user.role, 
     });
   } catch (error) {
     console.error("Profile fetch error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 
 const logoutUser = async (req, res) => {
