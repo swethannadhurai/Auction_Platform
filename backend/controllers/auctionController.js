@@ -74,6 +74,7 @@ const updateAuctionItem = async (req, res) => {
 
   try {
     const auctionItem = await AuctionItem.findById(id);
+
     if (!auctionItem) {
       return res.status(404).json({ message: "Auction item not found" });
     }
@@ -84,10 +85,10 @@ const updateAuctionItem = async (req, res) => {
 
     
     if (!auctionItem.seller || !auctionItem.product) {
-      return res.status(400).json({ message: "Auction item is missing seller or product reference" });
+      console.warn("Missing seller or product for auction:", auctionItem._id);
     }
 
-    
+  
     auctionItem.title = title || auctionItem.title;
     auctionItem.description = description || auctionItem.description;
     auctionItem.startingBid = startingBid || auctionItem.startingBid;
@@ -96,8 +97,10 @@ const updateAuctionItem = async (req, res) => {
     auctionItem.updatedAt = new Date();
 
     await auctionItem.save();
+
     res.json(auctionItem);
   } catch (error) {
+    console.error("Error updating auction:", error);
     res.status(500).json({ message: error.message });
   }
 };

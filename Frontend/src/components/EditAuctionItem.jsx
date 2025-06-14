@@ -31,8 +31,8 @@ const EditAuctionItem = () => {
           description: item.description || "",
           startingBid: item.startingBid || "",
           endDate: formattedDate,
-          seller: item.seller || "",
-          product: item.product || "",
+          seller: item.seller?._id || item.seller || "",       // ✅ ID only
+          product: item.product?._id || item.product || "",     // ✅ ID only
         });
       } catch (error) {
         console.error("Error fetching auction item:", error);
@@ -58,8 +58,8 @@ const EditAuctionItem = () => {
       description: auctionItem.description,
       startingBid: Number(auctionItem.startingBid),
       endDate: new Date(auctionItem.endDate).toISOString(),
-      seller: auctionItem.seller,
-      product: auctionItem.product,
+      seller: auctionItem.seller,     // ✅ ID only
+      product: auctionItem.product,   // ✅ ID only
     };
 
     try {
@@ -83,9 +83,7 @@ const EditAuctionItem = () => {
       <h2 className="text-3xl font-bold mb-6">Edit Auction Item</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="title" className="block text-lg mb-2">
-            Title
-          </label>
+          <label htmlFor="title" className="block text-lg mb-2">Title</label>
           <input
             type="text"
             id="title"
@@ -95,10 +93,9 @@ const EditAuctionItem = () => {
             className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
           />
         </div>
+
         <div>
-          <label htmlFor="description" className="block text-lg mb-2">
-            Description
-          </label>
+          <label htmlFor="description" className="block text-lg mb-2">Description</label>
           <textarea
             id="description"
             name="description"
@@ -108,10 +105,9 @@ const EditAuctionItem = () => {
             rows="4"
           />
         </div>
+
         <div>
-          <label htmlFor="startingBid" className="block text-lg mb-2">
-            Starting Bid
-          </label>
+          <label htmlFor="startingBid" className="block text-lg mb-2">Starting Bid</label>
           <input
             type="number"
             id="startingBid"
@@ -121,10 +117,9 @@ const EditAuctionItem = () => {
             className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
           />
         </div>
+
         <div>
-          <label htmlFor="endDate" className="block text-lg mb-2">
-            End Date
-          </label>
+          <label htmlFor="endDate" className="block text-lg mb-2">End Date</label>
           <input
             type="datetime-local"
             id="endDate"
@@ -134,6 +129,32 @@ const EditAuctionItem = () => {
             className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
           />
         </div>
+
+        {/* Optional: show seller/product IDs to confirm they are included */}
+        <div>
+          <label htmlFor="seller" className="block text-lg mb-2">Seller ID</label>
+          <input
+            type="text"
+            id="seller"
+            name="seller"
+            value={auctionItem.seller}
+            disabled
+            className="w-full p-2 bg-gray-700 border border-gray-600 rounded-lg"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="product" className="block text-lg mb-2">Product ID</label>
+          <input
+            type="text"
+            id="product"
+            name="product"
+            value={auctionItem.product}
+            disabled
+            className="w-full p-2 bg-gray-700 border border-gray-600 rounded-lg"
+          />
+        </div>
+
         <button
           type="submit"
           className="w-full py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800"
