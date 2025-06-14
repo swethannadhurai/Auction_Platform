@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
-
 const EditAuctionItem = () => {
 	const { id } = useParams();
 	const [auctionItem, setAuctionItem] = useState({
@@ -10,18 +9,23 @@ const EditAuctionItem = () => {
 		description: "",
 		startingBid: "",
 		endDate: "",
+		seller: "",
+		product: ""
 	});
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchAuctionItem = async () => {
-			const res = await axios.get(`https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
-				{ withCredentials: true }
-			);
-			//setAuctionItem(res.data);
-			const formattedDate = new Date(res.data.endDate).toISOString().slice(0, 16);
-              setAuctionItem({ ...res.data, endDate: formattedDate });
-
+			try {
+				const res = await axios.get(
+					`https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
+					{ withCredentials: true }
+				);
+				const formattedDate = new Date(res.data.endDate).toISOString().slice(0, 16);
+				setAuctionItem({ ...res.data, endDate: formattedDate });
+			} catch (error) {
+				console.error("Error fetching auction item:", error);
+			}
 		};
 		fetchAuctionItem();
 	}, [id]);
@@ -34,26 +38,29 @@ const EditAuctionItem = () => {
 		}));
 	};
 
-      const handleSubmit = async (e) => {
-	e.preventDefault();
+	const handleSubmit = async (e) => {
+		e.preventDefault();
 
-	// Format endDate to 'YYYY-MM-DDTHH:mm'
-	const formattedEndDate = new Date(auctionItem.endDate).toISOString().slice(0, 16);
+		const updatedItem = {
+			title: auctionItem.title,
+			description: auctionItem.description,
+			startingBid: auctionItem.startingBid,
+			endDate: new Date(auctionItem.endDate).toISOString(),
+			seller: auctionItem.seller,
+			product: auctionItem.product,
+		};
 
-	const updatedItem = {
-		...auctionItem,
-		endDate: formattedEndDate,
+		try {
+			await axios.put(
+				`https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
+				updatedItem,
+				{ withCredentials: true }
+			);
+			navigate(`/auction/${id}`);
+		} catch (error) {
+			console.error("Error updating auction item:", error);
+		}
 	};
-
-	await axios.put(
-		`https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
-		updatedItem,
-		{ withCredentials: true }
-	);
-
-	navigate(`/auction/${id}`);
-};
-
 
 	return (
 		<div className="max-w-4xl mx-auto mt-10 p-8 bg-gray-900 text-white rounded-lg shadow-lg">
