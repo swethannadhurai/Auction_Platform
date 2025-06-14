@@ -11,8 +11,8 @@ const EditAuctionItem = () => {
     description: "",
     startingBid: "",
     endDate: "",
-    seller: null,
-    product: null,
+    seller: "",
+    product: "",
   });
 
   useEffect(() => {
@@ -31,9 +31,11 @@ const EditAuctionItem = () => {
           description: item.description || "",
           startingBid: item.startingBid || "",
           endDate: formattedDate,
-          seller: item.seller || null,
-          product: item.product || null,
+          seller: item.seller || "",         // ✅ keep seller ID
+          product: item.product || "",       // ✅ keep product ID
         });
+
+        console.log("Fetched auction item:", item);
       } catch (error) {
         console.error("Error fetching auction item:", error);
       }
@@ -58,11 +60,9 @@ const EditAuctionItem = () => {
       description: auctionItem.description,
       startingBid: Number(auctionItem.startingBid),
       endDate: new Date(auctionItem.endDate).toISOString(),
+      seller: auctionItem.seller,      
+      product: auctionItem.product,    
     };
-
-    
-    if (auctionItem.seller) updatedItem.seller = auctionItem.seller;
-    if (auctionItem.product) updatedItem.product = auctionItem.product;
 
     try {
       console.log("Updated Item Data:", updatedItem);
@@ -136,6 +136,7 @@ const EditAuctionItem = () => {
             className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
           />
         </div>
+
         <button
           type="submit"
           className="w-full py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800"
