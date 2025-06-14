@@ -100,8 +100,9 @@ const updateAuctionItem = async (req, res) => {
     auctionItem.endDate = endDate ? new Date(endDate) : auctionItem.endDate;
 
     
-    auctionItem.seller = auctionItem.seller;
-    auctionItem.product = auctionItem.product;
+     auctionItem.seller = req.body.seller || auctionItem.seller;
+     auctionItem.product = req.body.product || auctionItem.product;
+  
 
     auctionItem.updatedAt = new Date();
 

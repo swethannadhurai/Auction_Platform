@@ -26,16 +26,17 @@ const EditAuctionItem = () => {
         const item = res.data;
         const formattedDate = new Date(item.endDate).toISOString().slice(0, 16);
 
-        console.log("Fetched auction item:", item); // Debugging
+        console.log("Fetched auction item:", item); 
 
-        setAuctionItem({
-          title: item.title || "",
-          description: item.description || "",
-          startingBid: item.startingBid || "",
-          endDate: formattedDate,
-          seller: item.seller,    
-          product: item.product,   
-        });
+      setAuctionItem({
+                title: item.title || "",
+                description: item.description || "",
+                startingBid: item.startingBid || "",
+                endDate: formattedDate,
+                seller: item.seller?._id || item.seller || "",
+                product: item.product?._id || item.product || "",
+      });
+
       } catch (error) {
         console.error("Error fetching auction item:", error);
       }
