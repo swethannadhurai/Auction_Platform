@@ -74,7 +74,7 @@ const getAuctionItemsByUser = async (req, res) => {
 
 const updateAuctionItem = async (req, res) => {
   const { id } = req.params;
-  const { title, description, startingBid, endDate } = req.body;
+  const { title, description, startingBid, endDate, seller, product } = req.body;
   const userId = req.user.id;
 
   try {
@@ -89,21 +89,18 @@ const updateAuctionItem = async (req, res) => {
     }
 
     
+    auctionItem.seller = seller || auctionItem.seller;
+    auctionItem.product = product || auctionItem.product;
+
+    
     if (!auctionItem.seller || !auctionItem.product) {
       return res.status(400).json({ message: "Auction item is missing seller or product reference" });
     }
 
-    
     auctionItem.title = title || auctionItem.title;
     auctionItem.description = description || auctionItem.description;
     auctionItem.startingBid = startingBid !== undefined ? startingBid : auctionItem.startingBid;
     auctionItem.endDate = endDate ? new Date(endDate) : auctionItem.endDate;
-
-    
-     auctionItem.seller = req.body.seller || auctionItem.seller;
-     auctionItem.product = req.body.product || auctionItem.product;
-  
-
     auctionItem.updatedAt = new Date();
 
     await auctionItem.save();
@@ -113,6 +110,7 @@ const updateAuctionItem = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 
