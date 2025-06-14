@@ -11,7 +11,7 @@ const upload = require('../middleware/multerConfig');
 // Auction management
 router.post('/auctions', authMiddleware, sellerOnly, upload.single('image'), auctionController.createAuctionItem);
 router.get('/auctions', authMiddleware, sellerOnly, auctionController.getAuctionItemsByUser);
-router.put('/auctions/:id', authMiddleware, sellerOnly, upload.single('image'), auctionController.updateAuctionItem);
+router.put('/auctions/:id', authMiddleware, sellerOnly, auctionController.updateAuctionItem);
 router.delete('/auctions/:id', authMiddleware, sellerOnly, auctionController.deleteAuctionItem);
 
 // Inventory management

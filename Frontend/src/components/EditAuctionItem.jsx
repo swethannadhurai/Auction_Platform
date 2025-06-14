@@ -18,7 +18,10 @@ const EditAuctionItem = () => {
 			const res = await axios.get(`https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
 				{ withCredentials: true }
 			);
-			setAuctionItem(res.data);
+			//setAuctionItem(res.data);
+			const formattedDate = new Date(res.data.endDate).toISOString().slice(0, 16);
+              setAuctionItem({ ...res.data, endDate: formattedDate });
+
 		};
 		fetchAuctionItem();
 	}, [id]);
@@ -31,13 +34,26 @@ const EditAuctionItem = () => {
 		}));
 	};
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		await axios.put(`https://auction-platform-ett9.onrender.com/api/auctions/${id}`, auctionItem,
-			{ withCredentials: true }
-		);
-		navigate(`/auction/${id}`);
+      const handleSubmit = async (e) => {
+	e.preventDefault();
+
+	// Format endDate to 'YYYY-MM-DDTHH:mm'
+	const formattedEndDate = new Date(auctionItem.endDate).toISOString().slice(0, 16);
+
+	const updatedItem = {
+		...auctionItem,
+		endDate: formattedEndDate,
 	};
+
+	await axios.put(
+		`https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
+		updatedItem,
+		{ withCredentials: true }
+	);
+
+	navigate(`/auction/${id}`);
+};
+
 
 	return (
 		<div className="max-w-4xl mx-auto mt-10 p-8 bg-gray-900 text-white rounded-lg shadow-lg">
