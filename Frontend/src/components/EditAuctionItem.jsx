@@ -4,8 +4,6 @@ import { useParams, useNavigate } from "react-router-dom";
 
 const EditAuctionItem = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-
   const [auctionItem, setAuctionItem] = useState({
     title: "",
     description: "",
@@ -14,6 +12,8 @@ const EditAuctionItem = () => {
     seller: "",
     product: "",
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAuctionItem = async () => {
@@ -26,16 +26,16 @@ const EditAuctionItem = () => {
         const item = res.data;
         const formattedDate = new Date(item.endDate).toISOString().slice(0, 16);
 
+        console.log("Fetched auction item:", item); // Debugging
+
         setAuctionItem({
           title: item.title || "",
           description: item.description || "",
           startingBid: item.startingBid || "",
           endDate: formattedDate,
-          seller: item.seller || "",         // ✅ keep seller ID
-          product: item.product || "",       // ✅ keep product ID
+          seller: item.seller,     // Don't overwrite with empty string
+          product: item.product,   // Don't overwrite with empty string
         });
-
-        console.log("Fetched auction item:", item);
       } catch (error) {
         console.error("Error fetching auction item:", error);
       }
@@ -60,12 +60,13 @@ const EditAuctionItem = () => {
       description: auctionItem.description,
       startingBid: Number(auctionItem.startingBid),
       endDate: new Date(auctionItem.endDate).toISOString(),
-      seller: auctionItem.seller,      
-      product: auctionItem.product,    
+      seller: auctionItem.seller,     // Must be valid
+      product: auctionItem.product,   // Must be valid
     };
 
     try {
-      console.log("Updated Item Data:", updatedItem);
+      console.log("Updated Item Data:", updatedItem); // Debugging
+
       await axios.put(
         `https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
         updatedItem,
@@ -136,7 +137,6 @@ const EditAuctionItem = () => {
             className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
           />
         </div>
-
         <button
           type="submit"
           className="w-full py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800"
