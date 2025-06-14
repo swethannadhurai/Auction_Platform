@@ -82,12 +82,17 @@ const updateAuctionItem = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized action" });
     }
 
+    
+    if (!auctionItem.seller || !auctionItem.product) {
+      return res.status(400).json({ message: "Auction item is missing seller or product reference" });
+    }
+
+    
     auctionItem.title = title || auctionItem.title;
     auctionItem.description = description || auctionItem.description;
     auctionItem.startingBid = startingBid || auctionItem.startingBid;
-    auctionItem.endDate = endDate
-      ? new Date(new Date(endDate).getTime())
-      : auctionItem.endDate;
+    auctionItem.endDate = endDate ? new Date(endDate) : auctionItem.endDate;
+
     auctionItem.updatedAt = new Date();
 
     await auctionItem.save();
@@ -96,6 +101,8 @@ const updateAuctionItem = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
 
 
 const deleteAuctionItem = async (req, res) => {
