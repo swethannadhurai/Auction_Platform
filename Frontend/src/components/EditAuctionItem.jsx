@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 
 const EditAuctionItem = () => {
   const { id } = useParams();
@@ -11,8 +11,8 @@ const EditAuctionItem = () => {
     description: "",
     startingBid: "",
     endDate: "",
-    seller: "",
-    product: "",
+    seller: null,
+    product: null,
   });
 
   useEffect(() => {
@@ -22,20 +22,20 @@ const EditAuctionItem = () => {
           `https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
           { withCredentials: true }
         );
-        const item = res.data;
 
-        console.log("Fetched auction item:", item); // ✅ Debug log
+        const item = res.data;
+        const formattedDate = new Date(item.endDate).toISOString().slice(0, 16);
 
         setAuctionItem({
           title: item.title || "",
           description: item.description || "",
           startingBid: item.startingBid || "",
-          endDate: new Date(item.endDate).toISOString().slice(0, 16),
-          seller: item.seller?._id || item.seller || "",
-          product: item.product?._id || item.product || "",
+          endDate: formattedDate,
+          seller: item.seller || null,
+          product: item.product || null,
         });
-      } catch (err) {
-        console.error("Error fetching auction item:", err);
+      } catch (error) {
+        console.error("Error fetching auction item:", error);
       }
     };
 
@@ -43,85 +43,102 @@ const EditAuctionItem = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    setAuctionItem({ ...auctionItem, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setAuctionItem((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      console.log("Updated Item Data:", auctionItem);
 
-      const res = await axios.put(
+    const updatedItem = {
+      title: auctionItem.title,
+      description: auctionItem.description,
+      startingBid: Number(auctionItem.startingBid),
+      endDate: new Date(auctionItem.endDate).toISOString(),
+    };
+
+    
+    if (auctionItem.seller) updatedItem.seller = auctionItem.seller;
+    if (auctionItem.product) updatedItem.product = auctionItem.product;
+
+    try {
+      console.log("Updated Item Data:", updatedItem);
+      await axios.put(
         `https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
-        auctionItem,
+        updatedItem,
         { withCredentials: true }
       );
-      console.log("Auction item updated:", res.data);
-      navigate("/seller/manage-auctions");
-    } catch (err) {
-      console.error("Error updating auction item:", err);
-      if (err.response) {
-        console.error("Backend response:", err.response.data);
+      navigate(`/auction/${id}`);
+    } catch (error) {
+      console.error("Error updating auction item:", error);
+      if (error.response?.data) {
+        console.error("Backend response:", error.response.data);
       }
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 mt-8 bg-gray-900 text-white rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold mb-6">Edit Auction Item</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="max-w-4xl mx-auto mt-10 p-8 bg-gray-900 text-white rounded-lg shadow-lg">
+      <h2 className="text-3xl font-bold mb-6">Edit Auction Item</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block mb-1">Title</label>
+          <label htmlFor="title" className="block text-lg mb-2">
+            Title
+          </label>
           <input
             type="text"
+            id="title"
             name="title"
             value={auctionItem.title}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white"
-            required
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
           />
         </div>
         <div>
-          <label className="block mb-1">Description</label>
+          <label htmlFor="description" className="block text-lg mb-2">
+            Description
+          </label>
           <textarea
+            id="description"
             name="description"
             value={auctionItem.description}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white"
-            rows={4}
-            required
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
+            rows="4"
           />
         </div>
         <div>
-          <label className="block mb-1">Starting Bid</label>
+          <label htmlFor="startingBid" className="block text-lg mb-2">
+            Starting Bid
+          </label>
           <input
             type="number"
+            id="startingBid"
             name="startingBid"
             value={auctionItem.startingBid}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white"
-            required
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
           />
         </div>
         <div>
-          <label className="block mb-1">End Date</label>
+          <label htmlFor="endDate" className="block text-lg mb-2">
+            End Date
+          </label>
           <input
             type="datetime-local"
+            id="endDate"
             name="endDate"
             value={auctionItem.endDate}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white"
-            required
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg"
           />
         </div>
-
-        {/* Hidden fields for seller and product */}
-        <input type="hidden" name="seller" value={auctionItem.seller} />
-        <input type="hidden" name="product" value={auctionItem.product} />
-
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
+          className="w-full py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800"
         >
           Update Auction Item
         </button>
@@ -131,4 +148,3 @@ const EditAuctionItem = () => {
 };
 
 export default EditAuctionItem;
-
