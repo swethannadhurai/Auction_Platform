@@ -10,7 +10,7 @@ const EditAuctionItem = () => {
     startingBid: "",
     endDate: "",
     seller: "",
-    product: ""
+    product: "",
   });
 
   const navigate = useNavigate();
@@ -22,12 +22,17 @@ const EditAuctionItem = () => {
           `https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
           { withCredentials: true }
         );
-        const formattedDate = new Date(res.data.endDate).toISOString().slice(0, 16);
+
+        const item = res.data;
+        const formattedDate = new Date(item.endDate).toISOString().slice(0, 16);
 
         setAuctionItem({
-          ...res.data,
-          startingBid: String(res.data.startingBid), 
-          endDate: formattedDate
+          title: item.title || "",
+          description: item.description || "",
+          startingBid: item.startingBid || "",
+          endDate: formattedDate,
+          seller: item.seller || "",
+          product: item.product || "",
         });
       } catch (error) {
         console.error("Error fetching auction item:", error);
@@ -53,24 +58,22 @@ const EditAuctionItem = () => {
       description: auctionItem.description,
       startingBid: Number(auctionItem.startingBid),
       endDate: new Date(auctionItem.endDate).toISOString(),
-      seller: auctionItem.seller,   
+      seller: auctionItem.seller,
       product: auctionItem.product,
     };
 
-    console.log("Updated Item Data:", updatedItem); 
-
     try {
+      console.log("Updated Item Data:", updatedItem);
       await axios.put(
         `https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
         updatedItem,
         { withCredentials: true }
       );
-
       navigate(`/auction/${id}`);
     } catch (error) {
       console.error("Error updating auction item:", error);
-      if (error.response) {
-        console.log("Backend response:", error.response.data); // shows the real issue
+      if (error.response?.data) {
+        console.error("Backend response:", error.response.data);
       }
     }
   };
@@ -80,7 +83,9 @@ const EditAuctionItem = () => {
       <h2 className="text-3xl font-bold mb-6">Edit Auction Item</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="title" className="block text-lg mb-2">Title</label>
+          <label htmlFor="title" className="block text-lg mb-2">
+            Title
+          </label>
           <input
             type="text"
             id="title"
@@ -91,7 +96,9 @@ const EditAuctionItem = () => {
           />
         </div>
         <div>
-          <label htmlFor="description" className="block text-lg mb-2">Description</label>
+          <label htmlFor="description" className="block text-lg mb-2">
+            Description
+          </label>
           <textarea
             id="description"
             name="description"
@@ -102,7 +109,9 @@ const EditAuctionItem = () => {
           />
         </div>
         <div>
-          <label htmlFor="startingBid" className="block text-lg mb-2">Starting Bid</label>
+          <label htmlFor="startingBid" className="block text-lg mb-2">
+            Starting Bid
+          </label>
           <input
             type="number"
             id="startingBid"
@@ -113,7 +122,9 @@ const EditAuctionItem = () => {
           />
         </div>
         <div>
-          <label htmlFor="endDate" className="block text-lg mb-2">End Date</label>
+          <label htmlFor="endDate" className="block text-lg mb-2">
+            End Date
+          </label>
           <input
             type="datetime-local"
             id="endDate"
