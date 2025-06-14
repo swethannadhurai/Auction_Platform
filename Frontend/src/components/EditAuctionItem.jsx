@@ -33,8 +33,8 @@ const EditAuctionItem = () => {
           description: item.description || "",
           startingBid: item.startingBid || "",
           endDate: formattedDate,
-          seller: item.seller,     // Don't overwrite with empty string
-          product: item.product,   // Don't overwrite with empty string
+          seller: item.seller,    
+          product: item.product,   
         });
       } catch (error) {
         console.error("Error fetching auction item:", error);
@@ -60,12 +60,13 @@ const EditAuctionItem = () => {
       description: auctionItem.description,
       startingBid: Number(auctionItem.startingBid),
       endDate: new Date(auctionItem.endDate).toISOString(),
-      seller: auctionItem.seller,     // Must be valid
-      product: auctionItem.product,   // Must be valid
+      seller: auctionItem.seller?._id || auctionItem.seller,
+      product: auctionItem.product?._id || auctionItem.product,
+
     };
 
     try {
-      console.log("Updated Item Data:", updatedItem); // Debugging
+      console.log("Updated Item Data:", updatedItem); 
 
       await axios.put(
         `https://auction-platform-ett9.onrender.com/api/auctions/${id}`,

@@ -45,15 +45,20 @@ const getAuctionItems = async (req, res) => {
 const getAuctionItemById = async (req, res) => {
   const { id } = req.params;
   try {
-    const auctionItem = await AuctionItem.findById(id);
+    const auctionItem = await AuctionItem.findById(id)
+      .populate("seller", "_id name email") 
+      .populate("product", "_id name");
+
     if (!auctionItem) {
       return res.status(404).json({ message: "Auction item not found" });
     }
+
     res.status(200).json(auctionItem);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 const getAuctionItemsByUser = async (req, res) => {
