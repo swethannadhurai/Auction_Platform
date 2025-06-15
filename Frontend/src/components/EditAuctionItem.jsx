@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../contexts";
 
 const EditAuctionItem = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { auth } = useAuth();
 
-  const [auctionItem, setAuctionItem] = useState(null); // null at start
+  const [auctionItem, setAuctionItem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
 
+  // Fetch auction item and available products
   useEffect(() => {
     const fetchAuctionItem = async () => {
       try {
@@ -18,25 +22,43 @@ const EditAuctionItem = () => {
         );
         const item = res.data;
 
-        console.log("Fetched auction item:", item);
-
         setAuctionItem({
           title: item.title || "",
           description: item.description || "",
           startingBid: item.startingBid || "",
           endDate: new Date(item.endDate).toISOString().slice(0, 16),
-          seller: item.seller?._id || item.seller || "",      // Fix here
-          product: item.product?._id || item.product || "",   // Fix here
+          seller: item.seller?._id || item.seller || "",
+          product: item.product?._id || item.product || "",
         });
 
-        setLoading(false); // Now data is ready
+        setLoading(false);
       } catch (err) {
         console.error("Error fetching auction item:", err);
       }
     };
 
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(
+          "https://auction-platform-ett9.onrender.com/api/inventory",
+          { withCredentials: true }
+        );
+        setProducts(res.data.products || []);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      }
+    };
+
     fetchAuctionItem();
+    fetchProducts();
   }, [id]);
+
+  // Set seller from auth context if not present
+  useEffect(() => {
+    if (auth.user && auctionItem && !auctionItem.seller) {
+      setAuctionItem((prev) => ({ ...prev, seller: auth.user._id }));
+    }
+  }, [auth.user, auctionItem]);
 
   const handleChange = (e) => {
     setAuctionItem({ ...auctionItem, [e.target.name]: e.target.value });
@@ -45,8 +67,6 @@ const EditAuctionItem = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Updated Item Data:", auctionItem);
-
       const res = await axios.put(
         `https://auction-platform-ett9.onrender.com/api/auctions/${id}`,
         auctionItem,
@@ -114,10 +134,25 @@ const EditAuctionItem = () => {
             required
           />
         </div>
+        <div>
+          <label className="block mb-1">Linked Product</label>
+          <select
+            name="product"
+            value={auctionItem.product}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-gray-800 text-white"
+            required
+          >
+            <option value="">-- Select Product --</option>
+            {products.map((product) => (
+              <option key={product._id} value={product._id}>
+                {product.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        {/* Hidden Fields */}
         <input type="hidden" name="seller" value={auctionItem.seller} />
-        <input type="hidden" name="product" value={auctionItem.product} />
 
         <button
           type="submit"
