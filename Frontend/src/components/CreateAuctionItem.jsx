@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -7,41 +7,58 @@ const CreateAuctionItem = () => {
 	const [description, setDescription] = useState("");
 	const [startingBid, setStartingBid] = useState("");
 	const [endDate, setEndDate] = useState("");
-	const [image, setImage] = useState(null); 
+	const [image, setImage] = useState(null);
+	const [selectedProduct, setSelectedProduct] = useState("");
+	const [products, setProducts] = useState([]);
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 
-	const handleSubmit = async (e) => {
-	e.preventDefault();
-
-	try {
-		const formData = new FormData();
-		formData.append("title", title);
-		formData.append("description", description);
-		formData.append("startingBid", startingBid);
-		formData.append("endDate", endDate);
-		if (image) {
-			formData.append("image", image);
-		}
-
-		await axios.post(
-			`${import.meta.env.VITE_API_URL}/api/auctions`,
-			formData,
-			{
-				withCredentials: true, 
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
+	useEffect(() => {
+		const fetchProducts = async () => {
+			try {
+				const res = await axios.get(
+					`${import.meta.env.VITE_API_URL}/api/products/seller`,
+					{ withCredentials: true }
+				);
+				setProducts(res.data);
+			} catch (error) {
+				console.error("Failed to fetch products", error);
 			}
-		);
+		};
+		fetchProducts();
+	}, []);
 
-		navigate("/profile");
-	} catch (err) {
-		setError("Failed to create auction. Please try again.");
-		console.error(err);
-	}
-};
+	const handleSubmit = async (e) => {
+		e.preventDefault();
 
+		try {
+			const formData = new FormData();
+			formData.append("title", title);
+			formData.append("description", description);
+			formData.append("startingBid", startingBid);
+			formData.append("endDate", endDate);
+			formData.append("product", selectedProduct);
+			if (image) {
+				formData.append("image", image);
+			}
+
+			await axios.post(
+				`${import.meta.env.VITE_API_URL}/api/auctions`,
+				formData,
+				{
+					withCredentials: true,
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
+			);
+
+			navigate("/profile");
+		} catch (err) {
+			setError("Failed to create auction. Please try again.");
+			console.error(err);
+		}
+	};
 
 	return (
 		<div className="bg-gray-900 min-h-screen py-12 px-4 sm:px-6 lg:px-8 text-gray-300">
@@ -54,10 +71,7 @@ const CreateAuctionItem = () => {
 						{error && <p className="text-red-500 mb-4">{error}</p>}
 						<form onSubmit={handleSubmit} encType="multipart/form-data">
 							<div className="mb-4">
-								<label
-									htmlFor="title"
-									className="block text-lg font-medium text-gray-300 mb-1"
-								>
+								<label htmlFor="title" className="block text-lg font-medium mb-1">
 									Title
 								</label>
 								<input
@@ -65,30 +79,24 @@ const CreateAuctionItem = () => {
 									type="text"
 									value={title}
 									onChange={(e) => setTitle(e.target.value)}
-									className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-300"
+									className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md"
 									required
 								/>
 							</div>
 							<div className="mb-4">
-								<label
-									htmlFor="description"
-									className="block text-lg font-medium text-gray-300 mb-1"
-								>
+								<label htmlFor="description" className="block text-lg font-medium mb-1">
 									Description
 								</label>
 								<textarea
 									id="description"
 									value={description}
 									onChange={(e) => setDescription(e.target.value)}
-									className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-300"
+									className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md"
 									required
 								/>
 							</div>
 							<div className="mb-4">
-								<label
-									htmlFor="startingBid"
-									className="block text-lg font-medium text-gray-300 mb-1"
-								>
+								<label htmlFor="startingBid" className="block text-lg font-medium mb-1">
 									Starting Bid ($)
 								</label>
 								<input
@@ -96,16 +104,13 @@ const CreateAuctionItem = () => {
 									type="number"
 									value={startingBid}
 									onChange={(e) => setStartingBid(e.target.value)}
-									className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-300"
+									className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md"
 									min={0}
 									required
 								/>
 							</div>
 							<div className="mb-4">
-								<label
-									htmlFor="endDate"
-									className="block text-lg font-medium text-gray-300 mb-1"
-								>
+								<label htmlFor="endDate" className="block text-lg font-medium mb-1">
 									End Date
 								</label>
 								<input
@@ -113,15 +118,31 @@ const CreateAuctionItem = () => {
 									type="datetime-local"
 									value={endDate}
 									onChange={(e) => setEndDate(e.target.value)}
-									className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-300"
+									className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md"
 									required
 								/>
 							</div>
-							<div className="mb-6">
-								<label
-									htmlFor="image"
-									className="block text-lg font-medium text-gray-300 mb-1"
+							<div className="mb-4">
+								<label htmlFor="product" className="block text-lg font-medium mb-1">
+									Select Product
+								</label>
+								<select
+									id="product"
+									value={selectedProduct}
+									onChange={(e) => setSelectedProduct(e.target.value)}
+									className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md"
+									required
 								>
+									<option value="">-- Select a Product --</option>
+									{products.map((product) => (
+										<option key={product._id} value={product._id}>
+											{product.name || product.title}
+										</option>
+									))}
+								</select>
+							</div>
+							<div className="mb-6">
+								<label htmlFor="image" className="block text-lg font-medium mb-1">
 									Image Upload
 								</label>
 								<input
