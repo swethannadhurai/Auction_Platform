@@ -18,11 +18,11 @@ const auctionItemSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    product: {
+   /* product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
       required: true,
-    },
+    },*/
     seller: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Seller",

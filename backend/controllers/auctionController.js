@@ -3,14 +3,10 @@ const Bid = require("../models/Bid");
 const User = require("../models/User");
 
 const createAuctionItem = async (req, res) => {
-  const { title, description, startingBid, endDate, product } = req.body;
+  const { title, description, startingBid, endDate } = req.body;
 
   if (!req.user || !req.user.id) {
     return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  if (!product) {
-    return res.status(400).json({ message: "Product reference is required" });
   }
 
   try {
@@ -25,7 +21,6 @@ const createAuctionItem = async (req, res) => {
       endDate: newDate,
       createdBy: req.user.id,
       seller: req.user._id,
-      product: product, 
       status: 'active'
     });
 
@@ -34,7 +29,6 @@ const createAuctionItem = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 
 const getAuctionItems = async (req, res) => {
@@ -78,7 +72,7 @@ const getAuctionItemsByUser = async (req, res) => {
 
 const updateAuctionItem = async (req, res) => {
   const { id } = req.params;
-  const { title, description, startingBid, endDate, product } = req.body;
+  const { title, description, startingBid, endDate } = req.body;
   const userId = req.user.id;
 
   try {
@@ -88,24 +82,19 @@ const updateAuctionItem = async (req, res) => {
       return res.status(404).json({ message: "Auction item not found" });
     }
 
-    
     if (auctionItem.createdBy.toString() !== userId) {
       return res.status(403).json({ message: "Unauthorized action" });
     }
 
-
-    
     if (title) auctionItem.title = title;
     if (description) auctionItem.description = description;
     if (startingBid !== undefined) auctionItem.startingBid = startingBid;
     if (endDate) auctionItem.endDate = new Date(endDate);
-    if (product) auctionItem.product = product;
 
     auctionItem.updatedAt = new Date();
 
-    
-    if (!auctionItem.seller || !auctionItem.product) {
-      return res.status(400).json({ message: "Missing required fields: seller or product" });
+    if (!auctionItem.seller) {
+      return res.status(400).json({ message: "Missing required field: seller" });
     }
 
     await auctionItem.save();
