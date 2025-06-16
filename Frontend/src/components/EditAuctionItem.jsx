@@ -6,8 +6,7 @@ import { useAuth } from "../contexts";
 const EditAuctionItem = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { auth } = useAuth();
-  const user = auth?.user;
+  const { user } = useAuth();  // ✅ FIXED
 
   const [auctionItem, setAuctionItem] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -135,4 +134,5 @@ const EditAuctionItem = () => {
 };
 
 export default EditAuctionItem;
+
 
