@@ -7,6 +7,7 @@ const EditAuctionItem = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { auth } = useAuth();
+  const user = auth?.user;
 
   const [auctionItem, setAuctionItem] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,11 +39,12 @@ const EditAuctionItem = () => {
     fetchAuctionItem();
   }, [id]);
 
+  // Set seller if not already set
   useEffect(() => {
-    if (auth.user && auctionItem && !auctionItem.seller) {
-      setAuctionItem((prev) => ({ ...prev, seller: auth.user._id }));
+    if (user && auctionItem && !auctionItem.seller) {
+      setAuctionItem((prev) => ({ ...prev, seller: user._id }));
     }
-  }, [auth.user, auctionItem]);
+  }, [user, auctionItem]);
 
   const handleChange = (e) => {
     setAuctionItem({ ...auctionItem, [e.target.name]: e.target.value });
@@ -66,7 +68,7 @@ const EditAuctionItem = () => {
     }
   };
 
-  if (loading || !auctionItem) {
+  if (loading || !auctionItem || !user) {
     return <div className="text-white p-4">Loading...</div>;
   }
 
@@ -133,3 +135,4 @@ const EditAuctionItem = () => {
 };
 
 export default EditAuctionItem;
+
