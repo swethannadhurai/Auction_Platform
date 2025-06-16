@@ -10,9 +10,8 @@ const EditAuctionItem = () => {
 
   const [auctionItem, setAuctionItem] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]);
 
-  // Fetch auction item and available products
+  // Fetch auction item
   useEffect(() => {
     const fetchAuctionItem = async () => {
       try {
@@ -28,7 +27,6 @@ const EditAuctionItem = () => {
           startingBid: item.startingBid || "",
           endDate: new Date(item.endDate).toISOString().slice(0, 16),
           seller: item.seller?._id || item.seller || "",
-          product: item.product?._id || item.product || "",
         });
 
         setLoading(false);
@@ -37,23 +35,9 @@ const EditAuctionItem = () => {
       }
     };
 
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get(
-          "https://auction-platform-ett9.onrender.com/api/inventory",
-          { withCredentials: true }
-        );
-        setProducts(res.data.products || []);
-      } catch (err) {
-        console.error("Failed to fetch products:", err);
-      }
-    };
-
     fetchAuctionItem();
-    fetchProducts();
   }, [id]);
 
-  // Set seller from auth context if not present
   useEffect(() => {
     if (auth.user && auctionItem && !auctionItem.seller) {
       setAuctionItem((prev) => ({ ...prev, seller: auth.user._id }));
@@ -133,23 +117,6 @@ const EditAuctionItem = () => {
             className="w-full p-2 rounded bg-gray-800 text-white"
             required
           />
-        </div>
-        <div>
-          <label className="block mb-1">Linked Product</label>
-          <select
-            name="product"
-            value={auctionItem.product}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white"
-            required
-          >
-            <option value="">-- Select Product --</option>
-            {products.map((product) => (
-              <option key={product._id} value={product._id}>
-                {product.name}
-              </option>
-            ))}
-          </select>
         </div>
 
         <input type="hidden" name="seller" value={auctionItem.seller} />
