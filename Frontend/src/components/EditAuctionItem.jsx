@@ -58,7 +58,7 @@ const EditAuctionItem = () => {
         { withCredentials: true }
       );
       console.log("Auction item updated:", res.data);
-      navigate("/seller/manage-auctions");
+      navigate("/profile");
     } catch (err) {
       console.error("Error updating auction item:", err);
       if (err.response) {
