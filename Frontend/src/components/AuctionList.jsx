@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 4;
 
 function AuctionList() {
 	const [auctionItems, setAuctionItems] = useState([]);
